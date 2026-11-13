@@ -206,3 +206,20 @@
   :focus-visible{outline:1px solid var(--acc);outline-offset:4px}
   @media (max-width:900px){ .ctrl{margin-left:auto} .lang{margin-left:0} }
   @media (max-width:520px){ .hero h1{font-size:clamp(46px,14vw,64px)} .phead h1{font-size:clamp(48px,15vw,72px)} .scroll{display:none} }
+
+  /* ===== booking ===== */
+  .rtabs{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line)}
+  .rtab{background:var(--bg);border:0;color:var(--mut);text-align:left;padding:24px 26px;cursor:pointer;font-family:var(--sans);position:relative;transition:background .3s,color .3s}
+  .rtab::after{content:"";position:absolute;left:0;bottom:0;height:2px;width:0;background:var(--acc);transition:width .5s cubic-bezier(.2,.8,.2,1)}
+  .rtab:hover{background:var(--bg2);color:var(--tx)}
+  .rtab.on{color:var(--tx);background:var(--bg2)}
+  .rtab.on::after{width:100%}
+  .rtab .no{font-family:var(--mono);font-size:11px;letter-spacing:.2em;color:var(--acc)}
+  .rtab b{display:block;font-family:var(--serif);font-weight:500;font-size:20px;letter-spacing:.06em;margin:8px 0 4px}
+  .rtab small{font-family:var(--mono);font-size:10px;letter-spacing:.18em;color:var(--mut)}
+  .rbox{margin-top:24px;background:#fff;border:1px solid var(--line2);border-radius:4px;overflow:hidden}
+  .rframe{display:none;width:100%;height:760px;border:0}
+  .rframe.on{display:block}
+  .rnote{margin-top:16px;font-size:13px;color:var(--mut)}
+  .rnote a{color:var(--acc);border-bottom:1px solid currentColor}
+  @media (max-width:700px){ .rtabs{grid-template-columns:1fr} .rframe{height:1000px} }
