@@ -330,3 +330,12 @@
 .pol p{color:var(--tx2);font-size:14.5px;line-height:1.95}
 .pol-date{font-family:var(--mono);font-size:12px;color:var(--mut);letter-spacing:.08em;text-align:right}
 .bk-privacy{font-size:12px;color:var(--mut)} .bk-privacy a{color:var(--acc)}
+
+/* contact form */
+.inq{margin-top:clamp(56px,7vw,88px);max-width:820px}
+.inq-head .k{display:block;font-family:var(--mono);font-size:11px;letter-spacing:.25em;color:var(--acc)}
+.inq-head h3{font-family:var(--serif);font-weight:500;font-size:clamp(24px,3vw,32px);letter-spacing:.06em;margin:10px 0 6px}
+.inq-head p{color:var(--mut);font-size:14px}
+.inq .form{max-width:none}
+.form .mode.topics{grid-template-columns:repeat(4,1fr)}
+@media(max-width:700px){.form .mode.topics{grid-template-columns:1fr 1fr}}

@@ -8,6 +8,13 @@
 <meta property="og:title" content="Contact — Tomoya Ogikubo">
 <meta property="og:description" content="荻窪倫也（Tomoya Ogikubo）の自己紹介サイト。法・都市・情報の視点を行き来しながら、考えたことを使えるかたちにする。">
 <meta property="og:type" content="website">
+<meta property="og:url" content="https://tomoya-univ.github.io/contact.html">
+<meta property="og:site_name" content="Tomoya Ogikubo">
+<meta property="og:image" content="https://tomoya-univ.github.io/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="荻窪 倫也 — 法・都市・情報。考えたことを、使えるかたちにする。">
+<meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#0b0c0e">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b0c0e'/%3E%3Crect x='3' y='3' width='58' height='58' rx='11' fill='none' stroke='%23c9a96a' stroke-opacity='.35' stroke-width='1.5'/%3E%3Ctext x='32' y='43' text-anchor='middle' font-family='Georgia,serif' font-size='28' fill='%23e9e7e2' letter-spacing='1'%3ET%3Ctspan fill='%23c9a96a'%3E.%3C/tspan%3EO%3C/text%3E%3C/svg%3E">
@@ -65,6 +72,42 @@
       <div class="go" data-en="View the service →">サービスを見る →</div>
     </a>
   </div>
+
+  <div class="inq rv" id="inquiry">
+    <div class="inq-head">
+      <span class="k">MESSAGE</span>
+      <h3 data-en="Send a message">メッセージを送る</h3>
+      <p data-en="For anything other than booking a meeting — no Google account needed.">予約以外のご連絡はこちらから。Googleアカウントは不要です。</p>
+    </div>
+    <form class="bk form" id="cform" novalidate>
+      <fieldset class="mode topics">
+        <legend data-en="Topic">お問い合わせの種類</legend>
+        <label class="opt"><input type="radio" name="topic" value="request" checked><span class="box"><b data-en="Request">ご依頼</b><small>REQUEST</small></span></label>
+        <label class="opt"><input type="radio" name="topic" value="consult"><span class="box"><b data-en="Consult">ご相談</b><small>CONSULT</small></span></label>
+        <label class="opt"><input type="radio" name="topic" value="press"><span class="box"><b data-en="Press / Talk">取材・登壇</b><small>PRESS</small></span></label>
+        <label class="opt"><input type="radio" name="topic" value="other"><span class="box"><b data-en="Other">その他</b><small>OTHER</small></span></label>
+      </fieldset>
+      <label><span data-en="Name">お名前</span><em>*</em><input name="name" required maxlength="60" autocomplete="name"></label>
+      <label><span data-en="Organization (optional)">ご所属（任意）</span><input name="org" maxlength="100" autocomplete="organization"></label>
+      <label><span data-en="Email">メールアドレス</span><em>*</em><input name="email" type="email" required maxlength="120" autocomplete="email"></label>
+      <label><span data-en="Message">本文</span><em>*</em><textarea name="message" rows="6" maxlength="3000" required></textarea></label>
+      <label class="hp" aria-hidden="true">Website<input name="website" tabindex="-1" autocomplete="off"></label>
+      <ul class="terms">
+        <li data-en="Replies are sent to the email address you enter.">ご返信は、ご入力のメールアドレス宛てにお送りします。</li>
+        <li data-en="Your information is used only to reply to you.">いただいた情報は、ご返信のためにのみ使用します。</li>
+      </ul>
+      <div class="cf" id="cf"></div>
+      <p class="bk-privacy"><a href="privacy.html" data-en="Privacy policy">プライバシーポリシー</a></p>
+      <p class="err" id="cErr" hidden></p>
+      <button class="submit" id="cSubmit" type="submit" data-en="Send message →">送信する →</button>
+    </form>
+    <div class="bk done" id="cDone" hidden>
+      <div class="check">✓</div>
+      <h3 data-en="Message sent">送信しました</h3>
+      <p data-en="Thank you. I will get back to you by email.">お問い合わせありがとうございます。内容を確認のうえ、メールでご返信します。</p>
+      <button class="link" id="cAgain" type="button" data-en="Send another">別のメッセージを送る</button>
+    </div>
+  </div>
 </section>
 
 <section class="next-wrap"><a class="next rv" href="index.html"><div><span class="k">BACK TO</span><b>Home</b></div><span class="arr">↺</span></a></section>
@@ -73,6 +116,62 @@
   <span>© 2026 TOMOYA OGIKUBO. ALL RIGHTS RESERVED.</span>
   <span>NAGOYA, JAPAN — <span id="clock"></span> JST</span>
 </footer>
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer></script>
+<script>
+(()=>{
+const GAS='https://script.google.com/macros/s/AKfycbwwHZMbajyQEnh_Q0-qykaZGZKVrILhgStKGElsD0LVBuhTKzPhHKeGp9OxKGPCkfqY/exec';
+const WORKER='https://tomoya-booking.tomoya-univ.workers.dev';
+const SITEKEY='0x4AAAAAAGCugDenG0MIqUHV';
+const $=id=>document.getElementById(id);
+const en=()=>document.documentElement.lang==='en';
+const T=(ja,e)=>en()?e:ja;
+let API=WORKER, trusted=false, cfId=null;
+const trustReady=fetch(WORKER+'/trust',{cache:'no-store'}).then(r=>r.json()).then(j=>{trusted=!!j.trusted}).catch(()=>{API=GAS});
+function cfRender(){
+  if(trusted){$('cf').hidden=true;return}
+  if(cfId!==null||!window.turnstile)return;
+  cfId=turnstile.render('#cf',{sitekey:SITEKEY,theme:document.documentElement.dataset.theme==='light'?'light':'dark',language:en()?'en':'ja',action:'contact',retry:'auto','error-callback':()=>{const e=$('cErr');e.textContent=T('ロボット確認を完了できませんでした。別のブラウザやスマートフォンからお試しください。','Verification could not be completed. Please try another browser.');e.hidden=false;return true}});
+}
+const cfToken=()=>{try{return cfId!==null?turnstile.getResponse(cfId)||'':''}catch(_){return ''}};
+const cfReset=()=>{try{if(cfId!==null)turnstile.reset(cfId)}catch(_){}};
+const isEmail=s=>s.length<=254&&/^[A-Za-z0-9!#$%&'*+\/=?^_`{|}~-]+(\.[A-Za-z0-9!#$%&'*+\/=?^_`{|}~-]+)*@([A-Za-z0-9]([A-Za-z0-9-]{0,61}[A-Za-z0-9])?\.)+[A-Za-z]{2,63}$/.test(s)&&s.split('@')[0].length<=64;
+// フォームが画面に入ったら、ロボット確認を表示
+const f=$('cform');
+let started=false;
+const start=()=>{if(started)return;started=true;trustReady.then(()=>{const t=setInterval(()=>{if(trusted||window.turnstile){clearInterval(t);cfRender()}},200)})};
+f.addEventListener('focusin',start);
+if('IntersectionObserver' in window){new IntersectionObserver((es,o)=>{if(es.some(e=>e.isIntersecting)){start();o.disconnect()}}).observe(f)}else start();
+
+f.addEventListener('submit',async e=>{
+  e.preventDefault();
+  const err=$('cErr'), name=f.name.value.trim(), email=f.email.value.trim(), message=f.message.value.trim();
+  const fail=m=>{err.textContent=m;err.hidden=false};
+  if(!name)return fail(T('お名前を入力してください。','Please enter your name.'));
+  if(!isEmail(email))return fail(T('メールアドレスを正しく入力してください。','Please enter a valid email.'));
+  if(message.length<5)return fail(T('本文を入力してください。','Please write a message.'));
+  await trustReady;
+  const cf=cfToken();
+  if(!trusted&&window.turnstile&&!cf)return fail(T('ロボットでないことの確認が終わるまでお待ちください。','Please complete the verification.'));
+  const btn=$('cSubmit');btn.disabled=true;btn.classList.add('busy');err.hidden=true;
+  try{
+    const r=await fetch(API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'contact',topic:f.topic.value,name,org:f.org.value,email,message,cf,website:f.website.value})});
+    const j=await r.json();
+    if(!j.ok){
+      const m={rate:T('ただいま送信を一時的に制限しています。時間をおいてお試しください。','Messages are temporarily limited. Please try again later.'),
+        busy:T('ただいま送信が混み合っています。時間をおいてお試しください。','Please try again later.'),
+        email:T('メールアドレスを正しく入力してください。','Please enter a valid email.'),
+        message:T('本文を入力してください。','Please write a message.'),
+        captcha:T('ロボットでないことの確認に失敗しました。もう一度お試しください。','Verification failed. Please try again.')}[j.error]||T('送信できませんでした。時間をおいてお試しください。','Could not send. Please try again later.');
+      fail(m);cfReset();return;
+    }
+    f.hidden=true;$('cDone').hidden=false;f.reset();cfReset();
+  }catch(_){fail(T('通信に失敗しました。時間をおいてお試しください。','Network error. Please try again.'));cfReset()}
+  finally{btn.disabled=false;btn.classList.remove('busy')}
+});
+$('cAgain').addEventListener('click',()=>{$('cDone').hidden=true;f.hidden=false});
+})();
+</script>
 <script src="main.js?v=3"></script>
+<!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "f81fd8d30ae948d6ae78dea09ddb84f5"}'></script><!-- End Cloudflare Web Analytics -->
 </body>
 </html>
