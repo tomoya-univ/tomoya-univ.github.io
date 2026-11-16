@@ -15,7 +15,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700&family=Noto+Sans+JP:wght@300;400;500&family=JetBrains+Mono:wght@400;500&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=6">
+<link rel="stylesheet" href="style.css?v=7">
 <script>try{document.documentElement.dataset.theme=localStorage.getItem("theme")||"dark"}catch(e){}</script>
 </head>
 <body data-title-ja="Booking — Tomoya Ogikubo" data-title-en="Booking — Tomoya Ogikubo">
@@ -94,7 +94,13 @@
     </fieldset>
     <label id="placeRow" hidden><span data-en="Preferred location (optional)">ご希望の場所（任意）</span><input name="place" maxlength="200" data-en-ph="e.g. near Nagoya Station, on campus" placeholder="例：名古屋駅周辺、学内 など"></label>
     <label><span data-en="Name">お名前</span><em>*</em><input name="name" required maxlength="60" autocomplete="name"></label>
-    <label><span data-en="Email">メールアドレス</span><em>*</em><input name="email" type="email" required maxlength="120" autocomplete="email"></label>
+    <div class="gid" id="gid">
+      <span class="gl"><span data-en="Verify with Google">Googleアカウントで本人確認</span><em>*</em></span>
+      <div id="gsiBtn" class="gbtn"></div>
+      <div class="gwho" id="gwho" hidden><span class="gok">✓</span><b id="gEmail"></b><button type="button" id="gOut" data-en="Change">切り替え</button></div>
+      <small data-en="Your booking uses this verified Google address. Only your name and email are shared.">このメールアドレスで予約します。受け取るのはお名前とメールアドレスのみです。</small>
+      <input type="hidden" name="email">
+    </div>
     <label><span data-en="Purpose (optional)">ご用件（任意）</span><textarea name="note" rows="4" maxlength="1000"></textarea></label>
     <label class="hp" aria-hidden="true">Website<input name="website" tabindex="-1" autocomplete="off"></label>
     <ul class="terms">
@@ -105,6 +111,7 @@
       <li data-en="Reservations may be cancelled for various reasons. Please be aware that we are not responsible for any damages resulting from the use of this page.">諸事情により予約をキャンセルさせていただくことがあります。本予約ページの利用による一切の損害について責任を負いかねます。</li>
     </ul>
     <div class="cf" id="cf"></div>
+    <p class="bk-privacy"><a href="privacy.html" data-en="Privacy policy">プライバシーポリシー</a><span data-en=" — how your information is handled"> — いただいた情報の取り扱いについて</span></p>
     <p class="err" id="formErr" hidden></p>
     <button class="submit" id="submit" type="submit"><span data-en="Send booking request">この内容で仮予約する</span> →</button>
   </form>
@@ -129,6 +136,7 @@
 </footer>
 <script src="main.js?v=3"></script>
 <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer></script>
+<script src="https://accounts.google.com/gsi/client" async defer onload="window.gsiReady&&gsiReady()"></script>
 <script>
 (()=>{
 // ===== 設定 =====
@@ -212,7 +220,7 @@ document.querySelectorAll('.rtab').forEach(t=>t.addEventListener('click',()=>{
 }));
 $('days').addEventListener('click',e=>{const b=e.target.closest('.day');if(!b||b.disabled)return;day=b.dataset.d;slot=null;render();step(1)});
 $('slots').addEventListener('click',e=>{const b=e.target.closest('.slot');if(!b)return;slot=new Date(b.dataset.s);render();
-  $('selLabel').textContent=label();$('pick').hidden=true;$('form').hidden=false;$('formErr').hidden=true;step(2);cfRender();
+  $('selLabel').textContent=label();$('pick').hidden=true;$('form').hidden=false;$('formErr').hidden=true;step(2);cfRender();gsiInit();
   $('form').scrollIntoView({behavior:'smooth',block:'start'});setTimeout(()=>$('form').name.focus(),400)});
 $('prev').addEventListener('click',()=>{page--;render()});
 $('next').addEventListener('click',()=>{page++;render()});
@@ -221,6 +229,26 @@ $('change').addEventListener('click',showPick);
 $('again').addEventListener('click',()=>{slot=null;data={};showPick();load()});
 $('durs').addEventListener('click',e=>{const b=e.target.closest('.dur');if(!b)return;
   document.querySelectorAll('.dur').forEach(x=>x.classList.toggle('on',x===b));dur=+b.dataset.m;load()});
+
+// ===== Google ログイン（本人確認） =====
+const GCLIENT = '94434616271-7v6f1gvfu26qrmlodrlistmbo5g80dhe.apps.googleusercontent.com';
+let idToken = '';
+const jwt=t=>{try{return JSON.parse(decodeURIComponent(atob(t.split('.')[1].replace(/-/g,'+').replace(/_/g,'/')).split('').map(c=>'%'+('00'+c.charCodeAt(0).toString(16)).slice(-2)).join('')))}catch(_){return {}}};
+function gsiInit(){
+  if(gsiInit.done||!window.google||!google.accounts||!google.accounts.id)return;
+  gsiInit.done=true;
+  google.accounts.id.initialize({client_id:GCLIENT,ux_mode:'popup',auto_select:false,callback:r=>{
+    const p=jwt(r.credential),f=$('form');
+    if(!p.email){return}
+    idToken=r.credential;f.email.value=p.email;
+    if(!f.name.value.trim()&&p.name)f.name.value=p.name;
+    $('gEmail').textContent=p.email;$('gwho').hidden=false;$('gsiBtn').hidden=true;$('formErr').hidden=true;
+  }});
+  google.accounts.id.renderButton($('gsiBtn'),{theme:document.documentElement.dataset.theme==='light'?'outline':'filled_black',size:'large',text:'signin_with',shape:'rectangular',locale:en()?'en':'ja'});
+}
+window.gsiReady=()=>{if(!$('form').hidden)gsiInit()};
+function gsiReset(){idToken='';$('form').email.value='';$('gwho').hidden=true;$('gsiBtn').hidden=false;try{google.accounts.id.disableAutoSelect()}catch(_){}}
+$('gOut').addEventListener('click',gsiReset);
 
 // ===== Cloudflare Turnstile =====
 function cfRender(){
@@ -238,21 +266,22 @@ $('form').addEventListener('submit',async e=>{
   const f=e.target, err=$('formErr');
   const name=f.name.value.trim(), email=f.email.value.trim();
   if(!name){err.textContent=T('お名前を入力してください。','Please enter your name.');err.hidden=false;return}
-  if(!isEmail(email)){err.textContent=T('メールアドレスを正しく入力してください。','Please enter a valid email.');err.hidden=false;return}
+  if(!idToken||!isEmail(email)){err.textContent=T('「Googleでログイン」から本人確認をしてください。','Please verify with Google first.');err.hidden=false;return}
   const cf=cfToken();
   if(!trusted&&SITEKEY&&window.turnstile&&!cf){err.textContent=T('ロボットでないことの確認が終わるまでお待ちください。','Please complete the verification.');err.hidden=false;return}
   const btn=$('submit');btn.disabled=true;btn.classList.add('busy');err.hidden=true;
   try{
     const r=await fetch(API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},
-      body:JSON.stringify({action:'book',type,dur,cf,start:slot.toISOString(),mode:f.mode.value,place:f.place.value,name,email,note:f.note.value,website:f.website.value})});
+      body:JSON.stringify({action:'book',type,dur,cf,idt:idToken,start:slot.toISOString(),mode:f.mode.value,place:f.place.value,name,email,note:f.note.value,website:f.website.value})});
     const j=await r.json();
     if(!j.ok){
       const m={taken:T('申し訳ありません。この時間はたった今埋まりました。別の時間をお選びください。','Sorry, this time was just taken. Please choose another.'),
         rate:T('ただいま予約の受付を一時的に制限しています。時間をおいてお試しいただくか、別の方法でご連絡ください。','Bookings are temporarily limited. Please try again later.'),
         email:T('メールアドレスを正しく入力してください。','Please enter a valid email.'),
+        auth:T('本人確認の有効期限が切れました。お手数ですが、もう一度ログインしてください。','Your sign-in expired. Please verify with Google again.'),
         paused:T('現在、予約の受付を一時停止しています。','Bookings are currently paused.'),
         captcha:T('ロボットでないことの確認に失敗しました。もう一度お試しください。','Verification failed. Please try again.')}[j.error]||T('予約できませんでした。時間をおいて再度お試しください。','Booking failed. Please try again later.');
-      err.textContent=m;err.hidden=false;cfReset();
+      err.textContent=m;err.hidden=false;cfReset();if(j.error==='auth')gsiReset();
       if(j.error==='taken'){data={};slot=null;setTimeout(()=>{showPick();load()},1800)}
       return;
     }
