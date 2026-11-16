@@ -15,7 +15,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700&family=Noto+Sans+JP:wght@300;400;500&family=JetBrains+Mono:wght@400;500&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=3">
+<link rel="stylesheet" href="style.css?v=4">
 <script>try{document.documentElement.dataset.theme=localStorage.getItem("theme")||"dark"}catch(e){}</script>
 </head>
 <body data-title-ja="Booking — Tomoya Ogikubo" data-title-en="Booking — Tomoya Ogikubo">
@@ -50,18 +50,62 @@
 </header>
 
 <section id="booking">
-  <p class="rv" style="color:var(--tx2);max-width:640px;margin-bottom:40px" data-en="Please choose the option that applies to you, then pick an available time. All meetings are held online via Google Meet.">該当する区分を選び、ご都合のよい日時をお選びください。いずれもGoogle Meetでのオンライン面談です。</p>
+  <p class="rv" style="color:var(--tx2);max-width:640px;margin-bottom:36px" data-en="Choose the option that applies to you, pick a date and time, and enter your details. All meetings are held online via Google Meet.">該当する区分を選び、日時を選んでお名前とメールアドレスをご入力ください。いずれもGoogle Meetでのオンライン面談です。</p>
+
+  <ol class="steps rv" id="steps">
+    <li class="on"><span>01</span><b data-en="Type">区分</b></li>
+    <li><span>02</span><b data-en="Date &amp; time">日時</b></li>
+    <li><span>03</span><b data-en="Details">入力</b></li>
+    <li><span>04</span><b data-en="Done">完了</b></li>
+  </ol>
+
   <div class="rtabs rv" role="tablist">
-    <button class="rtab on" data-k="in" role="tab" aria-selected="true"><span class="no">01</span><b data-en="Within Nagoya City">名古屋市内の方</b><small>ONLINE · GOOGLE MEET</small></button>
-    <button class="rtab" data-k="out" role="tab" aria-selected="false"><span class="no">02</span><b data-en="Outside Nagoya City">名古屋市外の方</b><small>ONLINE · GOOGLE MEET</small></button>
-    <button class="rtab" data-k="campus" role="tab" aria-selected="false"><span class="no">03</span><b data-en="On campus (NGU)">学内の方</b><small>ONLINE · GOOGLE MEET</small></button>
+    <button class="rtab on" data-k="in" role="tab" aria-selected="true"><span class="no">01</span><b data-en="Within Nagoya City">名古屋市内の方</b><small data-en="60 MIN · GOOGLE MEET">60分 · GOOGLE MEET</small></button>
+    <button class="rtab" data-k="out" role="tab" aria-selected="false"><span class="no">02</span><b data-en="Outside Nagoya City">名古屋市外の方</b><small data-en="60 MIN · GOOGLE MEET">60分 · GOOGLE MEET</small></button>
+    <button class="rtab" data-k="campus" role="tab" aria-selected="false"><span class="no">03</span><b data-en="On campus (NGU)">学内の方</b><small data-en="60 MIN · GOOGLE MEET">60分 · GOOGLE MEET</small></button>
   </div>
-  <div class="rbox rv">
-    <iframe class="rframe on" data-k="in" title="Within Nagoya City booking" src="https://calendar.google.com/calendar/appointments/schedules/AcZssZ04mmSredQysrCZNyFBc4li1B2BC1JOJ96hBPV6tx1GZ_WPm8K8kuWq89LU6t2_cjp7iHi4v3Yt?gv=true" loading="lazy"></iframe>
-    <iframe class="rframe" data-k="out" title="Outside Nagoya City booking" data-src="https://calendar.google.com/calendar/appointments/schedules/AcZssZ1XFSwYmwgDY4m0NEIZJWzQK3Ov4lO8KByKUKvXIanCNfgpCdcuGwF3jxc8hSRrnU1n6aA-47fs?gv=true" loading="lazy"></iframe>
-    <iframe class="rframe" data-k="campus" title="On campus (NGU) booking" data-src="https://calendar.google.com/calendar/appointments/schedules/AcZssZ1F5HhE87PYKnVSH9VuYcpevQY5ME3NG9yJxrR2KjtfRDw-AGu6-mp058ngz_uvnWZMqxGoLrNg?gv=true" loading="lazy"></iframe>
+
+  <!-- date & time -->
+  <div class="bk rv" id="pick">
+    <div class="bk-head">
+      <div><span class="k" data-en="SELECT A DATE">SELECT A DATE</span><b id="monthLabel">—</b></div>
+      <div class="nav2"><button class="arrow" id="prev" aria-label="Previous">←</button><button class="arrow" id="next" aria-label="Next">→</button></div>
+    </div>
+    <div class="days" id="days"></div>
+    <div class="bk-head sub"><div><span class="k">SELECT A TIME</span><b id="dayLabel">—</b></div><span class="tz">GMT+09:00 JST</span></div>
+    <div class="slots" id="slots"></div>
   </div>
-  <p class="rnote rv"><span data-en="If the calendar does not load, ">カレンダーが表示されない場合は、</span><a id="rext" href="https://calendar.google.com/calendar/appointments/schedules/AcZssZ04mmSredQysrCZNyFBc4li1B2BC1JOJ96hBPV6tx1GZ_WPm8K8kuWq89LU6t2_cjp7iHi4v3Yt?gv=true" target="_blank" rel="noopener"><span data-en="open it in a new tab →">新しいタブで開く →</span></a></p>
+
+  <!-- form -->
+  <form class="bk form" id="form" hidden novalidate>
+    <div class="sel">
+      <span class="k" data-en="YOUR BOOKING">YOUR BOOKING</span>
+      <b id="selLabel">—</b>
+      <button type="button" class="link" id="change" data-en="Change">変更する</button>
+    </div>
+    <label><span data-en="Name">お名前</span><em>*</em><input name="name" required maxlength="60" autocomplete="name"></label>
+    <label><span data-en="Email">メールアドレス</span><em>*</em><input name="email" type="email" required maxlength="120" autocomplete="email"></label>
+    <label><span data-en="Purpose (optional)">ご用件（任意）</span><textarea name="note" rows="4" maxlength="1000"></textarea></label>
+    <label class="hp" aria-hidden="true">Website<input name="website" tabindex="-1" autocomplete="off"></label>
+    <ul class="terms">
+      <li data-en="A Google Calendar invitation with the Meet link will be sent to your email.">ご入力のメールアドレスに、Google Meetのリンク付きのカレンダー招待をお送りします。</li>
+      <li data-en="Reservations must be made within the current month.">予約は当月内のみとしてください。</li>
+      <li data-en="Reservations may be cancelled for various reasons. Please be aware that we are not responsible for any damages resulting from the use of this page.">諸事情により予約をキャンセルさせていただくことがあります。本予約ページの利用による一切の損害について責任を負いかねます。</li>
+    </ul>
+    <p class="err" id="formErr" hidden></p>
+    <button class="submit" id="submit" type="submit"><span data-en="Confirm booking">この内容で予約する</span> →</button>
+  </form>
+
+  <!-- done -->
+  <div class="bk done" id="done" hidden>
+    <div class="check">✓</div>
+    <h3 data-en="Your booking is confirmed.">ご予約を承りました。</h3>
+    <p id="doneLabel"></p>
+    <p class="mut" data-en="An invitation has been sent to your email. Please join from the Google Meet link in the invitation at the scheduled time.">招待メールをお送りしました。当日はメール内の Google Meet リンクからご参加ください。</p>
+    <button class="link" id="again" data-en="Make another booking">別の予約をする</button>
+  </div>
+
+  <p class="rnote rv" id="fallback" hidden><span data-en="The booking system is temporarily unavailable. ">ただいま予約システムに接続できません。</span><a id="rext" target="_blank" rel="noopener" href="#"><span data-en="Book on the Google Calendar page →">Googleカレンダーの予約ページから予約する →</span></a></p>
 </section>
 
 <section class="next-wrap"><a class="next rv" href="contact.html"><div><span class="k">BACK TO</span><b>Contact</b></div><span class="arr">←</span></a></section>
@@ -72,14 +116,120 @@
 </footer>
 <script src="main.js?v=3"></script>
 <script>
-// booking tabs
-const tabs=document.querySelectorAll('.rtab'),frames=document.querySelectorAll('.rframe');
-tabs.forEach(t=>t.addEventListener('click',()=>{
-  tabs.forEach(x=>{x.classList.toggle('on',x===t);x.setAttribute('aria-selected',x===t)});
-  frames.forEach(f=>{const on=f.dataset.k===t.dataset.k;f.classList.toggle('on',on);
-    if(on&&f.dataset.src){f.src=f.dataset.src;delete f.dataset.src}
-    if(on){document.getElementById('rext').href=f.src}});
+(()=>{
+// ===== 設定 =====
+const API = 'https://script.google.com/macros/s/AKfycbwwHZMbajyQEnh_Q0-qykaZGZKVrILhgStKGElsD0LVBuhTKzPhHKeGp9OxKGPCkfqY/exec';
+const FALLBACK = {
+  in:'https://calendar.google.com/calendar/appointments/schedules/AcZssZ04mmSredQysrCZNyFBc4li1B2BC1JOJ96hBPV6tx1GZ_WPm8K8kuWq89LU6t2_cjp7iHi4v3Yt?gv=true',
+  out:'https://calendar.google.com/calendar/appointments/schedules/AcZssZ1XFSwYmwgDY4m0NEIZJWzQK3Ov4lO8KByKUKvXIanCNfgpCdcuGwF3jxc8hSRrnU1n6aA-47fs?gv=true',
+  campus:'https://calendar.google.com/calendar/appointments/schedules/AcZssZ1F5HhE87PYKnVSH9VuYcpevQY5ME3NG9yJxrR2KjtfRDw-AGu6-mp058ngz_uvnWZMqxGoLrNg?gv=true'
+};
+const TZ='Asia/Tokyo';
+const $=id=>document.getElementById(id);
+const en=()=>document.documentElement.lang==='en';
+const T=(ja,e)=>en()?e:ja;
+
+let type='in', data={}, day=null, slot=null, page=0;
+const PER=7;
+
+const ymd=d=>new Intl.DateTimeFormat('en-CA',{timeZone:TZ,year:'numeric',month:'2-digit',day:'2-digit'}).format(d);
+const fmt=(d,o)=>new Intl.DateTimeFormat(en()?'en-US':'ja-JP',{timeZone:TZ,...o}).format(d);
+const hm=d=>new Intl.DateTimeFormat('en-GB',{timeZone:TZ,hour:'2-digit',minute:'2-digit'}).format(d);
+
+function step(n){[...$('steps').children].forEach((li,i)=>{li.classList.toggle('on',i<=n);li.classList.toggle('cur',i===n)})}
+
+function fallback(show){
+  $('fallback').hidden=!show; $('rext').href=FALLBACK[type];
+  $('pick').classList.toggle('off',show);
+}
+
+async function load(){
+  slot=null; day=null; page=0;
+  $('days').innerHTML='<div class="skel"></div>'.repeat(PER); $('slots').innerHTML='';
+  $('dayLabel').textContent='—'; $('monthLabel').textContent='—';
+  if(!API){fallback(true);$('days').innerHTML='';return}
+  if(data[type]){render();return}
+  try{
+    const r=await fetch(API+'?action=slots&type='+type,{cache:'no-store'});
+    const j=await r.json(); if(!j.ok) throw j;
+    const by={}; j.slots.forEach(s=>{const d=new Date(s),k=ymd(d);(by[k]=by[k]||[]).push(d)});
+    data[type]={by,dur:j.durationMin||60};
+    fallback(false); render();
+  }catch(e){console.warn(e);fallback(true);$('days').innerHTML=''}
+}
+
+function dayList(){
+  const out=[],now=new Date();
+  for(let i=0;i<=30;i++){out.push(new Date(now.getTime()+i*864e5))}
+  return out;
+}
+
+function render(){
+  const D=data[type]; if(!D) return;
+  const list=dayList(), pages=Math.ceil(list.length/PER);
+  if(day===null){const first=list.find(d=>D.by[ymd(d)]);day=first?ymd(first):ymd(list[0]);page=Math.floor(list.findIndex(d=>ymd(d)===day)/PER)}
+  const view=list.slice(page*PER,page*PER+PER);
+  $('monthLabel').textContent=fmt(view[0],{year:'numeric',month:'long'});
+  $('prev').disabled=page===0; $('next').disabled=page>=pages-1;
+  $('days').innerHTML=view.map(d=>{const k=ymd(d),n=(D.by[k]||[]).length;
+    return `<button class="day${k===day?' on':''}" data-d="${k}" ${n?'':'disabled'}><small>${fmt(d,{weekday:'short'})}</small><b>${fmt(d,{day:'numeric'}).replace('日','')}</b><i>${n?T(n+'枠',n+(n>1?' slots':' slot')):'—'}</i></button>`}).join('');
+  const sl=D.by[day]||[];
+  const dd=new Date(day+'T12:00:00+09:00');
+  $('dayLabel').textContent=fmt(dd,{month:'long',day:'numeric',weekday:'long'});
+  $('slots').innerHTML=sl.length?sl.map(s=>{const e=new Date(s.getTime()+D.dur*6e4);return `<button class="slot${slot&&+slot===+s?' on':''}" data-s="${s.toISOString()}">${hm(s)}<span> – ${hm(e)}</span></button>`}).join('')
+    :`<p class="empty">${T('この日は空きがありません。','No times available on this day.')}</p>`;
+}
+
+function label(){
+  const D=data[type],e=new Date(slot.getTime()+D.dur*6e4);
+  const tl=document.querySelector(`.rtab[data-k="${type}"] b`).textContent;
+  return `${fmt(slot,{month:'long',day:'numeric',weekday:'short'})} ${hm(slot)} – ${hm(e)}　/　${tl}`;
+}
+
+// events
+document.querySelectorAll('.rtab').forEach(t=>t.addEventListener('click',()=>{
+  document.querySelectorAll('.rtab').forEach(x=>{x.classList.toggle('on',x===t);x.setAttribute('aria-selected',x===t)});
+  type=t.dataset.k; showPick(); load();
 }));
+$('days').addEventListener('click',e=>{const b=e.target.closest('.day');if(!b||b.disabled)return;day=b.dataset.d;slot=null;render();step(1)});
+$('slots').addEventListener('click',e=>{const b=e.target.closest('.slot');if(!b)return;slot=new Date(b.dataset.s);render();
+  $('selLabel').textContent=label();$('pick').hidden=true;$('form').hidden=false;$('formErr').hidden=true;step(2);
+  $('form').scrollIntoView({behavior:'smooth',block:'start'});setTimeout(()=>$('form').name.focus(),400)});
+$('prev').addEventListener('click',()=>{page--;render()});
+$('next').addEventListener('click',()=>{page++;render()});
+function showPick(){$('pick').hidden=false;$('form').hidden=true;$('done').hidden=true;step(slot?1:0)}
+$('change').addEventListener('click',showPick);
+$('again').addEventListener('click',()=>{slot=null;delete data[type];showPick();load()});
+
+$('form').addEventListener('submit',async e=>{
+  e.preventDefault();
+  const f=e.target, err=$('formErr');
+  const name=f.name.value.trim(), email=f.email.value.trim();
+  if(!name){err.textContent=T('お名前を入力してください。','Please enter your name.');err.hidden=false;return}
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){err.textContent=T('メールアドレスを正しく入力してください。','Please enter a valid email.');err.hidden=false;return}
+  const btn=$('submit');btn.disabled=true;btn.classList.add('busy');err.hidden=true;
+  try{
+    const r=await fetch(API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},
+      body:JSON.stringify({action:'book',type,start:slot.toISOString(),name,email,note:f.note.value,website:f.website.value})});
+    const j=await r.json();
+    if(!j.ok){
+      const m={taken:T('申し訳ありません。この時間はたった今埋まりました。別の時間をお選びください。','Sorry, this time was just taken. Please choose another.'),
+        rate:T('短時間に多くの予約があったため、受付を一時停止しています。時間をおいてお試しください。','Too many requests. Please try again later.'),
+        email:T('メールアドレスを正しく入力してください。','Please enter a valid email.')}[j.error]||T('予約できませんでした。時間をおいて再度お試しください。','Booking failed. Please try again later.');
+      err.textContent=m;err.hidden=false;
+      if(j.error==='taken'){delete data[type];slot=null;setTimeout(()=>{showPick();load()},1800)}
+      return;
+    }
+    $('doneLabel').textContent=label();
+    $('form').hidden=true;$('done').hidden=false;step(3);f.reset();
+    delete data[type];
+  }catch(x){err.textContent=T('通信に失敗しました。時間をおいて再度お試しください。','Network error. Please try again.');err.hidden=false}
+  finally{btn.disabled=false;btn.classList.remove('busy')}
+});
+
+$('lang').addEventListener('click',()=>setTimeout(()=>{render();if(slot)$('selLabel').textContent=label()},0));
+load();
+})();
 </script>
 </body>
 </html>
