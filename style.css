@@ -198,8 +198,9 @@
 
   /* ===== page transitions ===== */
   body{animation:pagein .7s cubic-bezier(.2,.8,.2,1) both}
-  @keyframes pagein{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-  body.leaving{opacity:0;transform:translateY(-6px);transition:opacity .35s,transform .35s}
+  /* body に transform を付けると position:fixed の基準がページ全体になり、スマホのメニューがずれるため、フェードのみ */
+  @keyframes pagein{from{opacity:0}to{opacity:1}}
+  body.leaving{opacity:0;transition:opacity .35s}
   .progress{position:fixed;top:0;left:0;height:2px;background:var(--acc);z-index:60;width:0;transition:width .1s linear}
 
   /* ===== polish ===== */
