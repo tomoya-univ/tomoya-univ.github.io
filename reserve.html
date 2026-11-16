@@ -221,7 +221,7 @@ $('durs').addEventListener('click',e=>{const b=e.target.closest('.dur');if(!b)re
 function cfRender(){
   if(!SITEKEY||!window.turnstile)return;
   if(cfId!==null){try{turnstile.reset(cfId)}catch(_){}return}
-  cfId=turnstile.render('#cf',{sitekey:SITEKEY,theme:document.documentElement.dataset.theme==='light'?'light':'dark',language:en()?'en':'ja',action:'booking'});
+  cfId=turnstile.render('#cf',{sitekey:SITEKEY,theme:document.documentElement.dataset.theme==='light'?'light':'dark',language:en()?'en':'ja',action:'booking','retry':'auto','error-callback':()=>{const e=$('formErr');e.textContent=T('ロボット確認を完了できませんでした。お手数ですが、別のブラウザ（Chrome・Safariなど）やスマートフォンからお試しください。','Verification could not be completed. Please try another browser or your phone.');e.hidden=false;return true}});
 }
 const cfToken=()=>{try{return cfId!==null?turnstile.getResponse(cfId)||'':''}catch(_){return ''}};
 const cfReset=()=>{try{if(cfId!==null)turnstile.reset(cfId)}catch(_){}};
