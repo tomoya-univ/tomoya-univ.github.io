@@ -180,7 +180,7 @@
   /* ===== light theme ===== */
   html[data-theme="light"]{
     --bg:#f5f3ee; --bg2:#ece9e2; --line:rgba(0,0,0,.07); --line2:rgba(0,0,0,.16);
-    --tx:#17181b; --tx2:#3a3c41; --mut:#6d7076; --acc:#9a7536; --acc2:#3e6990; --nav:245,243,238;
+    --tx:#17181b; --tx2:#3a3c41; --mut:#64676d; --acc:#82612a; --acc2:#3e6990; --nav:245,243,238;
   }
   html[data-theme="light"] .badge{color:#fff}
   html[data-theme="light"] #cursor{background:radial-gradient(circle, rgba(154,117,54,.10), transparent 65%)}
@@ -343,3 +343,6 @@
 
 /* mobile tweaks */
 @media(max-width:520px){.form .mode .box b{font-size:16px;white-space:nowrap;letter-spacing:.02em}}
+
+/* light mode: readable error text (contrast >= 4.5) */
+html[data-theme="light"] .err{color:#a8402f}
