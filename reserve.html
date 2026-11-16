@@ -160,6 +160,7 @@ async function load(){
   try{
     const r=await fetch(API+'?action=slots&type='+type,{cache:'no-store'});
     const j=await r.json(); if(!j.ok) throw j;
+    if(j.paused){$('pick').classList.add('off');$('days').innerHTML='';$('monthLabel').textContent='—';$('slots').innerHTML='<p class="empty">'+T('現在、予約の受付を一時停止しています。','Bookings are currently paused.')+'</p>';$('pick').classList.remove('off');return}
     const by={}; j.slots.forEach(s=>{const d=new Date(s),k=ymd(d);(by[k]=by[k]||[]).push(d)});
     data[type]={by,dur:j.durationMin||60};
     fallback(false); render();
@@ -223,7 +224,8 @@ $('form').addEventListener('submit',async e=>{
     if(!j.ok){
       const m={taken:T('申し訳ありません。この時間はたった今埋まりました。別の時間をお選びください。','Sorry, this time was just taken. Please choose another.'),
         rate:T('ただいま予約の受付を一時的に制限しています。時間をおいてお試しいただくか、別の方法でご連絡ください。','Bookings are temporarily limited. Please try again later.'),
-        email:T('メールアドレスを正しく入力してください。','Please enter a valid email.')}[j.error]||T('予約できませんでした。時間をおいて再度お試しください。','Booking failed. Please try again later.');
+        email:T('メールアドレスを正しく入力してください。','Please enter a valid email.'),
+        paused:T('現在、予約の受付を一時停止しています。','Bookings are currently paused.')}[j.error]||T('予約できませんでした。時間をおいて再度お試しください。','Booking failed. Please try again later.');
       err.textContent=m;err.hidden=false;
       if(j.error==='taken'){delete data[type];slot=null;setTimeout(()=>{showPick();load()},1800)}
       return;
