@@ -86,7 +86,7 @@
   .badge{display:inline-block;font-family:var(--mono);font-size:10px;letter-spacing:.15em;background:var(--acc);color:#000;padding:2px 8px;margin-left:10px;vertical-align:middle;font-weight:500}
 
   /* lang */
-  .lang{background:none;border:1px solid var(--line2);color:var(--mut);font-family:var(--mono);font-size:11px;letter-spacing:.15em;padding:6px 12px;cursor:pointer;transition:border-color .3s}
+  .lang{white-space:nowrap;background:none;border:1px solid var(--line2);color:var(--mut);font-family:var(--mono);font-size:11px;letter-spacing:.15em;padding:6px 12px;cursor:pointer;transition:border-color .3s}
   .lang:hover{border-color:var(--acc)}
   .lang b{font-weight:400;transition:color .3s}
   .lang b.on{color:var(--acc)}
@@ -339,3 +339,6 @@
 .inq .form{max-width:none}
 .form .mode.topics{grid-template-columns:repeat(4,1fr)}
 @media(max-width:700px){.form .mode.topics{grid-template-columns:1fr 1fr}}
+
+/* mobile tweaks */
+@media(max-width:520px){.form .mode .box b{font-size:16px;white-space:nowrap;letter-spacing:.02em}}
