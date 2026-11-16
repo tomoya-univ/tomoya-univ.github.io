@@ -15,7 +15,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700&family=Noto+Sans+JP:wght@300;400;500&family=JetBrains+Mono:wght@400;500&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=4">
+<link rel="stylesheet" href="style.css?v=5">
 <script>try{document.documentElement.dataset.theme=localStorage.getItem("theme")||"dark"}catch(e){}</script>
 </head>
 <body data-title-ja="Booking — Tomoya Ogikubo" data-title-en="Booking — Tomoya Ogikubo">
@@ -50,7 +50,7 @@
 </header>
 
 <section id="booking">
-  <p class="rv" style="color:var(--tx2);max-width:640px;margin-bottom:36px" data-en="Choose the option that applies to you, pick a date and time, and enter your details. All meetings are held online via Google Meet.">該当する区分を選び、日時を選んでお名前とメールアドレスをご入力ください。いずれもGoogle Meetでのオンライン面談です。</p>
+  <p class="rv" style="color:var(--tx2);max-width:640px;margin-bottom:36px" data-en="Choose the option that applies to you, pick a date and time, and enter your details. You can choose either an online meeting (Google Meet) or an in-person meeting.">該当する区分を選び、日時を選んでお名前とメールアドレスをご入力ください。オンライン（Google Meet）と対面（実地）のどちらかをお選びいただけます。</p>
 
   <ol class="steps rv" id="steps">
     <li class="on"><span>01</span><b data-en="Type">区分</b></li>
@@ -60,9 +60,9 @@
   </ol>
 
   <div class="rtabs rv" role="tablist">
-    <button class="rtab on" data-k="in" role="tab" aria-selected="true"><span class="no">01</span><b data-en="Within Nagoya City">名古屋市内の方</b><small data-en="60 MIN · GOOGLE MEET">60分 · GOOGLE MEET</small></button>
-    <button class="rtab" data-k="out" role="tab" aria-selected="false"><span class="no">02</span><b data-en="Outside Nagoya City">名古屋市外の方</b><small data-en="60 MIN · GOOGLE MEET">60分 · GOOGLE MEET</small></button>
-    <button class="rtab" data-k="campus" role="tab" aria-selected="false"><span class="no">03</span><b data-en="On campus (NGU)">学内の方</b><small data-en="60 MIN · GOOGLE MEET">60分 · GOOGLE MEET</small></button>
+    <button class="rtab on" data-k="in" role="tab" aria-selected="true"><span class="no">01</span><b data-en="Within Nagoya City">名古屋市内の方</b><small data-en="60 MIN · ONLINE / IN PERSON">60分 · オンライン / 対面</small></button>
+    <button class="rtab" data-k="out" role="tab" aria-selected="false"><span class="no">02</span><b data-en="Outside Nagoya City">名古屋市外の方</b><small data-en="60 MIN · ONLINE / IN PERSON">60分 · オンライン / 対面</small></button>
+    <button class="rtab" data-k="campus" role="tab" aria-selected="false"><span class="no">03</span><b data-en="On campus (NGU)">学内の方</b><small data-en="60 MIN · ONLINE / IN PERSON">60分 · オンライン / 対面</small></button>
   </div>
 
   <!-- date & time -->
@@ -83,12 +83,19 @@
       <b id="selLabel">—</b>
       <button type="button" class="link" id="change" data-en="Change">変更する</button>
     </div>
+    <fieldset class="mode">
+      <legend data-en="Format">面談の形式</legend><em>*</em>
+      <label class="opt"><input type="radio" name="mode" value="meet" checked><span class="box"><b data-en="Online">オンライン</b><small>GOOGLE MEET</small></span></label>
+      <label class="opt"><input type="radio" name="mode" value="inperson"><span class="box"><b data-en="In person">対面（実地）</b><small>IN PERSON</small></span></label>
+    </fieldset>
+    <label id="placeRow" hidden><span data-en="Preferred location (optional)">ご希望の場所（任意）</span><input name="place" maxlength="200" data-en-ph="e.g. near Nagoya Station, on campus" placeholder="例：名古屋駅周辺、学内 など"></label>
     <label><span data-en="Name">お名前</span><em>*</em><input name="name" required maxlength="60" autocomplete="name"></label>
     <label><span data-en="Email">メールアドレス</span><em>*</em><input name="email" type="email" required maxlength="120" autocomplete="email"></label>
     <label><span data-en="Purpose (optional)">ご用件（任意）</span><textarea name="note" rows="4" maxlength="1000"></textarea></label>
     <label class="hp" aria-hidden="true">Website<input name="website" tabindex="-1" autocomplete="off"></label>
     <ul class="terms">
-      <li data-en="A Google Calendar invitation with the Meet link will be sent to your email.">ご入力のメールアドレスに、Google Meetのリンク付きのカレンダー招待をお送りします。</li>
+      <li data-en="A Google Calendar invitation will be sent to your email (with a Meet link for online meetings).">ご入力のメールアドレスに、カレンダーの招待をお送りします（オンラインの場合はGoogle Meetのリンク付き）。</li>
+      <li data-en="For in-person meetings, the location will be confirmed with you by email.">対面の場合、場所は確認のうえ改めてメールでご連絡します。</li>
       <li data-en="Reservations must be made within the current month.">予約は当月内のみとしてください。</li>
       <li data-en="Reservations may be cancelled for various reasons. Please be aware that we are not responsible for any damages resulting from the use of this page.">諸事情により予約をキャンセルさせていただくことがあります。本予約ページの利用による一切の損害について責任を負いかねます。</li>
     </ul>
@@ -101,7 +108,7 @@
     <div class="check">✓</div>
     <h3 data-en="Your booking is confirmed.">ご予約を承りました。</h3>
     <p id="doneLabel"></p>
-    <p class="mut" data-en="An invitation has been sent to your email. Please join from the Google Meet link in the invitation at the scheduled time.">招待メールをお送りしました。当日はメール内の Google Meet リンクからご参加ください。</p>
+    <p class="mut" id="doneNote"></p>
     <button class="link" id="again" data-en="Make another booking">別の予約をする</button>
   </div>
 
@@ -210,7 +217,7 @@ $('form').addEventListener('submit',async e=>{
   const btn=$('submit');btn.disabled=true;btn.classList.add('busy');err.hidden=true;
   try{
     const r=await fetch(API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},
-      body:JSON.stringify({action:'book',type,start:slot.toISOString(),name,email,note:f.note.value,website:f.website.value})});
+      body:JSON.stringify({action:'book',type,start:slot.toISOString(),mode:f.mode.value,place:f.place.value,name,email,note:f.note.value,website:f.website.value})});
     const j=await r.json();
     if(!j.ok){
       const m={taken:T('申し訳ありません。この時間はたった今埋まりました。別の時間をお選びください。','Sorry, this time was just taken. Please choose another.'),
@@ -220,13 +227,18 @@ $('form').addEventListener('submit',async e=>{
       if(j.error==='taken'){delete data[type];slot=null;setTimeout(()=>{showPick();load()},1800)}
       return;
     }
-    $('doneLabel').textContent=label();
+    const ip=f.mode.value==='inperson';
+    $('doneLabel').textContent=label()+'　/　'+(ip?T('対面','In person'):T('オンライン（Google Meet）','Online (Google Meet)'));
+    $('doneNote').textContent=ip?T('招待メールをお送りしました。場所は確認のうえ、改めてご連絡します。','An invitation has been sent. We will contact you to confirm the location.'):T('招待メールをお送りしました。当日はメール内の Google Meet リンクからご参加ください。','An invitation has been sent. Please join from the Google Meet link in the invitation.');
     $('form').hidden=true;$('done').hidden=false;step(3);f.reset();
     delete data[type];
   }catch(x){err.textContent=T('通信に失敗しました。時間をおいて再度お試しください。','Network error. Please try again.');err.hidden=false}
   finally{btn.disabled=false;btn.classList.remove('busy')}
 });
 
+document.querySelectorAll('input[name=mode]').forEach(r=>r.addEventListener('change',()=>{$('placeRow').hidden=$('form').mode.value!=='inperson'}));
+$('form').addEventListener('reset',()=>setTimeout(()=>{$('placeRow').hidden=true},0));
+const ph=$('form').place;$('lang').addEventListener('click',()=>setTimeout(()=>{ph.dataset.ja=ph.dataset.ja||'例：名古屋駅周辺、学内 など';ph.placeholder=en()?ph.dataset.enPh:ph.dataset.ja},0));
 $('lang').addEventListener('click',()=>setTimeout(()=>{render();if(slot)$('selLabel').textContent=label()},0));
 load();
 })();
