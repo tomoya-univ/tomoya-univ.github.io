@@ -15,7 +15,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700&family=Noto+Sans+JP:wght@300;400;500&family=JetBrains+Mono:wght@400;500&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=5">
+<link rel="stylesheet" href="style.css?v=6">
 <script>try{document.documentElement.dataset.theme=localStorage.getItem("theme")||"dark"}catch(e){}</script>
 </head>
 <body data-title-ja="Booking — Tomoya Ogikubo" data-title-en="Booking — Tomoya Ogikubo">
@@ -60,14 +60,18 @@
   </ol>
 
   <div class="rtabs rv" role="tablist">
-    <button class="rtab on" data-k="in" role="tab" aria-selected="true"><span class="no">01</span><b data-en="Within Nagoya City">名古屋市内の方</b><small data-en="60 MIN · ONLINE / IN PERSON">60分 · オンライン / 対面</small></button>
-    <button class="rtab" data-k="out" role="tab" aria-selected="false"><span class="no">02</span><b data-en="Outside Nagoya City">名古屋市外の方</b><small data-en="60 MIN · ONLINE / IN PERSON">60分 · オンライン / 対面</small></button>
-    <button class="rtab" data-k="campus" role="tab" aria-selected="false"><span class="no">03</span><b data-en="On campus (NGU)">学内の方</b><small data-en="60 MIN · ONLINE / IN PERSON">60分 · オンライン / 対面</small></button>
+    <button class="rtab on" data-k="in" role="tab" aria-selected="true"><span class="no">01</span><b data-en="Within Nagoya City">名古屋市内の方</b><small data-en="10–60 MIN · ONLINE / IN PERSON">10〜60分 · オンライン / 対面</small></button>
+    <button class="rtab" data-k="out" role="tab" aria-selected="false"><span class="no">02</span><b data-en="Outside Nagoya City">名古屋市外の方</b><small data-en="10–60 MIN · ONLINE / IN PERSON">10〜60分 · オンライン / 対面</small></button>
+    <button class="rtab" data-k="campus" role="tab" aria-selected="false"><span class="no">03</span><b data-en="On campus (NGU)">学内の方</b><small data-en="10–60 MIN · ONLINE / IN PERSON">10〜60分 · オンライン / 対面</small></button>
   </div>
 
   <!-- date & time -->
   <div class="bk rv" id="pick">
-    <div class="bk-head">
+    <div class="bk-head dur-head"><div><span class="k" data-en="DURATION">DURATION</span><b data-en="Meeting length">面談の長さ</b></div></div>
+    <div class="durs" id="durs" role="radiogroup">
+      <button type="button" class="dur" data-m="10">10<small data-en="min">分</small></button><button type="button" class="dur" data-m="20">20<small data-en="min">分</small></button><button type="button" class="dur" data-m="30">30<small data-en="min">分</small></button><button type="button" class="dur" data-m="40">40<small data-en="min">分</small></button><button type="button" class="dur" data-m="50">50<small data-en="min">分</small></button><button type="button" class="dur on" data-m="60">60<small data-en="min">分</small></button>
+    </div>
+    <div class="bk-head sub">
       <div><span class="k" data-en="SELECT A DATE">SELECT A DATE</span><b id="monthLabel">—</b></div>
       <div class="nav2"><button class="arrow" id="prev" aria-label="Previous">←</button><button class="arrow" id="next" aria-label="Next">→</button></div>
     </div>
@@ -100,6 +104,7 @@
       <li data-en="Your name, email address and message are used only to arrange this meeting.">ご入力のお名前・メールアドレス・ご用件は、面談の調整のためにのみ使用します。</li>
       <li data-en="Reservations may be cancelled for various reasons. Please be aware that we are not responsible for any damages resulting from the use of this page.">諸事情により予約をキャンセルさせていただくことがあります。本予約ページの利用による一切の損害について責任を負いかねます。</li>
     </ul>
+    <div class="cf" id="cf"></div>
     <p class="err" id="formErr" hidden></p>
     <button class="submit" id="submit" type="submit"><span data-en="Send booking request">この内容で仮予約する</span> →</button>
   </form>
@@ -113,7 +118,7 @@
     <button class="link" id="again" data-en="Make another booking">別の予約をする</button>
   </div>
 
-  <p class="rnote rv" id="fallback" hidden><span data-en="The booking system is temporarily unavailable. ">ただいま予約システムに接続できません。</span><a id="rext" target="_blank" rel="noopener" href="#"><span data-en="Book on the Google Calendar page →">Googleカレンダーの予約ページから予約する →</span></a></p>
+  <p class="rnote rv" id="fallback" hidden data-en="The booking system is temporarily unavailable. Please try again later.">ただいま予約システムに接続できません。時間をおいて再度お試しください。</p>
 </section>
 
 <section class="next-wrap"><a class="next rv" href="contact.html"><div><span class="k">BACK TO</span><b>Contact</b></div><span class="arr">←</span></a></section>
@@ -123,21 +128,19 @@
   <span>NAGOYA, JAPAN — <span id="clock"></span> JST</span>
 </footer>
 <script src="main.js?v=3"></script>
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer></script>
 <script>
 (()=>{
 // ===== 設定 =====
 const API = 'https://script.google.com/macros/s/AKfycbwwHZMbajyQEnh_Q0-qykaZGZKVrILhgStKGElsD0LVBuhTKzPhHKeGp9OxKGPCkfqY/exec';
-const FALLBACK = {
-  in:'https://calendar.google.com/calendar/appointments/schedules/AcZssZ04mmSredQysrCZNyFBc4li1B2BC1JOJ96hBPV6tx1GZ_WPm8K8kuWq89LU6t2_cjp7iHi4v3Yt?gv=true',
-  out:'https://calendar.google.com/calendar/appointments/schedules/AcZssZ1XFSwYmwgDY4m0NEIZJWzQK3Ov4lO8KByKUKvXIanCNfgpCdcuGwF3jxc8hSRrnU1n6aA-47fs?gv=true',
-  campus:'https://calendar.google.com/calendar/appointments/schedules/AcZssZ1F5HhE87PYKnVSH9VuYcpevQY5ME3NG9yJxrR2KjtfRDw-AGu6-mp058ngz_uvnWZMqxGoLrNg?gv=true'
-};
+const SITEKEY = '0x4AAAAAAGCugDenG0MIqUHV'; // Cloudflare Turnstile（公開用のサイトキー）
 const TZ='Asia/Tokyo';
 const $=id=>document.getElementById(id);
 const en=()=>document.documentElement.lang==='en';
 const T=(ja,e)=>en()?e:ja;
 
-let type='in', data={}, day=null, slot=null, page=0;
+let type='in', dur=60, data={}, day=null, slot=null, page=0, cfId=null;
+const key=()=>type+':'+dur;
 const PER=7;
 
 const ymd=d=>new Intl.DateTimeFormat('en-CA',{timeZone:TZ,year:'numeric',month:'2-digit',day:'2-digit'}).format(d);
@@ -147,7 +150,7 @@ const hm=d=>new Intl.DateTimeFormat('en-GB',{timeZone:TZ,hour:'2-digit',minute:'
 function step(n){[...$('steps').children].forEach((li,i)=>{li.classList.toggle('on',i<=n);li.classList.toggle('cur',i===n)})}
 
 function fallback(show){
-  $('fallback').hidden=!show; $('rext').href=FALLBACK[type];
+  $('fallback').hidden=!show;
   $('pick').classList.toggle('off',show);
 }
 
@@ -156,13 +159,15 @@ async function load(){
   $('days').innerHTML='<div class="skel"></div>'.repeat(PER); $('slots').innerHTML='';
   $('dayLabel').textContent='—'; $('monthLabel').textContent='—';
   if(!API){fallback(true);$('days').innerHTML='';return}
-  if(data[type]){render();return}
+  if(data[key()]){render();return}
   try{
-    const r=await fetch(API+'?action=slots&type='+type,{cache:'no-store'});
+    const k0=key();
+    const r=await fetch(API+'?action=slots&type='+type+'&dur='+dur,{cache:'no-store'});
     const j=await r.json(); if(!j.ok) throw j;
     if(j.paused){$('pick').classList.add('off');$('days').innerHTML='';$('monthLabel').textContent='—';$('slots').innerHTML='<p class="empty">'+T('現在、予約の受付を一時停止しています。','Bookings are currently paused.')+'</p>';$('pick').classList.remove('off');return}
     const by={}; j.slots.forEach(s=>{const d=new Date(s),k=ymd(d);(by[k]=by[k]||[]).push(d)});
-    data[type]={by,dur:j.durationMin||60};
+    data[k0]={by,dur:j.durationMin||dur};
+    if(k0!==key())return;
     fallback(false); render();
   }catch(e){console.warn(e);fallback(true);$('days').innerHTML=''}
 }
@@ -174,7 +179,7 @@ function dayList(){
 }
 
 function render(){
-  const D=data[type]; if(!D) return;
+  const D=data[key()]; if(!D) return;
   const list=dayList(), pages=Math.ceil(list.length/PER);
   if(day===null){const first=list.find(d=>D.by[ymd(d)]);day=first?ymd(first):ymd(list[0]);page=Math.floor(list.findIndex(d=>ymd(d)===day)/PER)}
   const view=list.slice(page*PER,page*PER+PER);
@@ -185,14 +190,14 @@ function render(){
   const sl=D.by[day]||[];
   const dd=new Date(day+'T12:00:00+09:00');
   $('dayLabel').textContent=fmt(dd,{month:'long',day:'numeric',weekday:'long'});
-  $('slots').innerHTML=sl.length?sl.map(s=>{const e=new Date(s.getTime()+D.dur*6e4);return `<button class="slot${slot&&+slot===+s?' on':''}" data-s="${s.toISOString()}">${hm(s)}<span> – ${hm(e)}</span></button>`}).join('')
+  $('slots').innerHTML=sl.length?sl.map(s=>{const e=new Date(s.getTime()+D.dur*6e4);return `<button class="slot${slot&&+slot===+s?' on':''}" data-s="${s.toISOString()}" title="${hm(s)} – ${hm(e)}">${hm(s)}</button>`}).join('')
     :`<p class="empty">${T('この日は空きがありません。','No times available on this day.')}</p>`;
 }
 
 function label(){
-  const D=data[type],e=new Date(slot.getTime()+D.dur*6e4);
+  const D=data[key()],e=new Date(slot.getTime()+D.dur*6e4);
   const tl=document.querySelector(`.rtab[data-k="${type}"] b`).textContent;
-  return `${fmt(slot,{month:'long',day:'numeric',weekday:'short'})} ${hm(slot)} – ${hm(e)}　/　${tl}`;
+  return `${fmt(slot,{month:'long',day:'numeric',weekday:'short'})} ${hm(slot)} – ${hm(e)}（${T(D.dur+'分',D.dur+' min')}）　/　${tl}`;
 }
 
 // events
@@ -202,40 +207,55 @@ document.querySelectorAll('.rtab').forEach(t=>t.addEventListener('click',()=>{
 }));
 $('days').addEventListener('click',e=>{const b=e.target.closest('.day');if(!b||b.disabled)return;day=b.dataset.d;slot=null;render();step(1)});
 $('slots').addEventListener('click',e=>{const b=e.target.closest('.slot');if(!b)return;slot=new Date(b.dataset.s);render();
-  $('selLabel').textContent=label();$('pick').hidden=true;$('form').hidden=false;$('formErr').hidden=true;step(2);
+  $('selLabel').textContent=label();$('pick').hidden=true;$('form').hidden=false;$('formErr').hidden=true;step(2);cfRender();
   $('form').scrollIntoView({behavior:'smooth',block:'start'});setTimeout(()=>$('form').name.focus(),400)});
 $('prev').addEventListener('click',()=>{page--;render()});
 $('next').addEventListener('click',()=>{page++;render()});
 function showPick(){$('pick').hidden=false;$('form').hidden=true;$('done').hidden=true;step(slot?1:0)}
 $('change').addEventListener('click',showPick);
-$('again').addEventListener('click',()=>{slot=null;delete data[type];showPick();load()});
+$('again').addEventListener('click',()=>{slot=null;data={};showPick();load()});
+$('durs').addEventListener('click',e=>{const b=e.target.closest('.dur');if(!b)return;
+  document.querySelectorAll('.dur').forEach(x=>x.classList.toggle('on',x===b));dur=+b.dataset.m;load()});
+
+// ===== Cloudflare Turnstile =====
+function cfRender(){
+  if(!SITEKEY||!window.turnstile)return;
+  if(cfId!==null){try{turnstile.reset(cfId)}catch(_){}return}
+  cfId=turnstile.render('#cf',{sitekey:SITEKEY,theme:document.documentElement.dataset.theme==='light'?'light':'dark',language:en()?'en':'ja',action:'booking'});
+}
+const cfToken=()=>{try{return cfId!==null?turnstile.getResponse(cfId)||'':''}catch(_){return ''}};
+const cfReset=()=>{try{if(cfId!==null)turnstile.reset(cfId)}catch(_){}};
+const isEmail=s=>s.length<=254&&/^[A-Za-z0-9!#$%&'*+\/=?^_`{|}~-]+(\.[A-Za-z0-9!#$%&'*+\/=?^_`{|}~-]+)*@([A-Za-z0-9]([A-Za-z0-9-]{0,61}[A-Za-z0-9])?\.)+[A-Za-z]{2,63}$/.test(s)&&s.split('@')[0].length<=64;
 
 $('form').addEventListener('submit',async e=>{
   e.preventDefault();
   const f=e.target, err=$('formErr');
   const name=f.name.value.trim(), email=f.email.value.trim();
   if(!name){err.textContent=T('お名前を入力してください。','Please enter your name.');err.hidden=false;return}
-  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){err.textContent=T('メールアドレスを正しく入力してください。','Please enter a valid email.');err.hidden=false;return}
+  if(!isEmail(email)){err.textContent=T('メールアドレスを正しく入力してください。','Please enter a valid email.');err.hidden=false;return}
+  const cf=cfToken();
+  if(SITEKEY&&window.turnstile&&!cf){err.textContent=T('ロボットでないことの確認が終わるまでお待ちください。','Please complete the verification.');err.hidden=false;return}
   const btn=$('submit');btn.disabled=true;btn.classList.add('busy');err.hidden=true;
   try{
     const r=await fetch(API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},
-      body:JSON.stringify({action:'book',type,start:slot.toISOString(),mode:f.mode.value,place:f.place.value,name,email,note:f.note.value,website:f.website.value})});
+      body:JSON.stringify({action:'book',type,dur,cf,start:slot.toISOString(),mode:f.mode.value,place:f.place.value,name,email,note:f.note.value,website:f.website.value})});
     const j=await r.json();
     if(!j.ok){
       const m={taken:T('申し訳ありません。この時間はたった今埋まりました。別の時間をお選びください。','Sorry, this time was just taken. Please choose another.'),
         rate:T('ただいま予約の受付を一時的に制限しています。時間をおいてお試しいただくか、別の方法でご連絡ください。','Bookings are temporarily limited. Please try again later.'),
         email:T('メールアドレスを正しく入力してください。','Please enter a valid email.'),
-        paused:T('現在、予約の受付を一時停止しています。','Bookings are currently paused.')}[j.error]||T('予約できませんでした。時間をおいて再度お試しください。','Booking failed. Please try again later.');
-      err.textContent=m;err.hidden=false;
-      if(j.error==='taken'){delete data[type];slot=null;setTimeout(()=>{showPick();load()},1800)}
+        paused:T('現在、予約の受付を一時停止しています。','Bookings are currently paused.'),
+        captcha:T('ロボットでないことの確認に失敗しました。もう一度お試しください。','Verification failed. Please try again.')}[j.error]||T('予約できませんでした。時間をおいて再度お試しください。','Booking failed. Please try again later.');
+      err.textContent=m;err.hidden=false;cfReset();
+      if(j.error==='taken'){data={};slot=null;setTimeout(()=>{showPick();load()},1800)}
       return;
     }
     const ip=f.mode.value==='inperson';
     $('doneLabel').textContent=label()+'　/　'+(ip?T('対面','In person'):T('オンライン（Google Meet）','Online (Google Meet)'));
     $('doneNote').textContent=ip?T('内容を確認のうえ、カレンダーの招待で確定のご連絡をお送りします。場所もあわせてご連絡します。','We will review your request and send a calendar invitation to confirm, along with the location.'):T('内容を確認のうえ、Google Meet のリンク付きのカレンダー招待で確定のご連絡をお送りします。','We will review your request and send a calendar invitation with a Google Meet link to confirm.');
     $('form').hidden=true;$('done').hidden=false;step(3);f.reset();
-    delete data[type];
-  }catch(x){err.textContent=T('通信に失敗しました。時間をおいて再度お試しください。','Network error. Please try again.');err.hidden=false}
+    data={};cfReset();
+  }catch(x){cfReset();err.textContent=T('通信に失敗しました。時間をおいて再度お試しください。','Network error. Please try again.');err.hidden=false}
   finally{btn.disabled=false;btn.classList.remove('busy')}
 });
 

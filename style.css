@@ -302,3 +302,14 @@
   .form .mode .opt input:checked + .box{border-color:var(--acc);background:color-mix(in srgb,var(--acc) 12%,transparent)}
   .form .mode .opt input:checked + .box small{color:var(--acc)}
   .form .mode .opt input:focus-visible + .box{outline:1px solid var(--acc);outline-offset:3px}
+  .durs{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-bottom:8px}
+  .dur{background:none;border:1px solid var(--line2);color:var(--tx);padding:12px 4px;font-family:var(--serif);font-size:22px;cursor:pointer;transition:all .3s}
+  .dur small{font-family:var(--sans);font-size:11px;color:var(--mut);margin-left:2px}
+  .dur:hover{border-color:var(--acc)}
+  .dur.on{background:var(--acc);border-color:var(--acc);color:var(--bg)}
+  .dur.on small{color:var(--bg)}
+  .dur-head{margin-bottom:12px}
+  .slots{grid-template-columns:repeat(auto-fill,minmax(84px,1fr));gap:8px}
+  .slot{padding:11px 4px;font-size:14px}
+  .cf{min-height:65px}
+  @media (max-width:700px){ .durs{grid-template-columns:repeat(3,1fr)} .slots{grid-template-columns:repeat(4,1fr)} }
