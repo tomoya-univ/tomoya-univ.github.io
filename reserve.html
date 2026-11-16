@@ -132,7 +132,11 @@
 <script>
 (()=>{
 // ===== 設定 =====
-const API = 'https://script.google.com/macros/s/AKfycbwwHZMbajyQEnh_Q0-qykaZGZKVrILhgStKGElsD0LVBuhTKzPhHKeGp9OxKGPCkfqY/exec';
+const GAS = 'https://script.google.com/macros/s/AKfycbwwHZMbajyQEnh_Q0-qykaZGZKVrILhgStKGElsD0LVBuhTKzPhHKeGp9OxKGPCkfqY/exec';
+const WORKER = 'https://tomoya-booking.30l0044-ngu.workers.dev';
+let API = WORKER, trusted = false;
+// 大学の固定IPから来ているかを中継（Cloudflare Worker）に確認。中継が使えないときは Apps Script に直接つなぐ
+const trustReady = fetch(WORKER+'/trust',{cache:'no-store'}).then(r=>r.json()).then(j=>{trusted=!!j.trusted}).catch(()=>{API=GAS});
 const SITEKEY = '0x4AAAAAAGCugDenG0MIqUHV'; // Cloudflare Turnstile（公開用のサイトキー）
 const TZ='Asia/Tokyo';
 const $=id=>document.getElementById(id);
@@ -162,6 +166,7 @@ async function load(){
   if(data[key()]){render();return}
   try{
     const k0=key();
+    await trustReady;
     const r=await fetch(API+'?action=slots&type='+type+'&dur='+dur,{cache:'no-store'});
     const j=await r.json(); if(!j.ok) throw j;
     if(j.paused){$('pick').classList.add('off');$('days').innerHTML='';$('monthLabel').textContent='—';$('slots').innerHTML='<p class="empty">'+T('現在、予約の受付を一時停止しています。','Bookings are currently paused.')+'</p>';$('pick').classList.remove('off');return}
@@ -219,6 +224,7 @@ $('durs').addEventListener('click',e=>{const b=e.target.closest('.dur');if(!b)re
 
 // ===== Cloudflare Turnstile =====
 function cfRender(){
+  if(trusted){$('cf').hidden=true;return}
   if(!SITEKEY||!window.turnstile)return;
   if(cfId!==null){try{turnstile.reset(cfId)}catch(_){}return}
   cfId=turnstile.render('#cf',{sitekey:SITEKEY,theme:document.documentElement.dataset.theme==='light'?'light':'dark',language:en()?'en':'ja',action:'booking','retry':'auto','error-callback':()=>{const e=$('formErr');e.textContent=T('ロボット確認を完了できませんでした。お手数ですが、別のブラウザ（Chrome・Safariなど）やスマートフォンからお試しください。','Verification could not be completed. Please try another browser or your phone.');e.hidden=false;return true}});
@@ -234,7 +240,7 @@ $('form').addEventListener('submit',async e=>{
   if(!name){err.textContent=T('お名前を入力してください。','Please enter your name.');err.hidden=false;return}
   if(!isEmail(email)){err.textContent=T('メールアドレスを正しく入力してください。','Please enter a valid email.');err.hidden=false;return}
   const cf=cfToken();
-  if(SITEKEY&&window.turnstile&&!cf){err.textContent=T('ロボットでないことの確認が終わるまでお待ちください。','Please complete the verification.');err.hidden=false;return}
+  if(!trusted&&SITEKEY&&window.turnstile&&!cf){err.textContent=T('ロボットでないことの確認が終わるまでお待ちください。','Please complete the verification.');err.hidden=false;return}
   const btn=$('submit');btn.disabled=true;btn.classList.add('busy');err.hidden=true;
   try{
     const r=await fetch(API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},
