@@ -94,19 +94,20 @@
     <label><span data-en="Purpose (optional)">ご用件（任意）</span><textarea name="note" rows="4" maxlength="1000"></textarea></label>
     <label class="hp" aria-hidden="true">Website<input name="website" tabindex="-1" autocomplete="off"></label>
     <ul class="terms">
-      <li data-en="A Google Calendar invitation will be sent to your email (with a Meet link for online meetings).">ご入力のメールアドレスに、カレンダーの招待をお送りします（オンラインの場合はGoogle Meetのリンク付き）。</li>
+      <li data-en="Your request is received as a provisional booking. Once confirmed, a Google Calendar invitation will be sent to your email (with a Meet link for online meetings).">送信後は仮予約となり、確認のうえ確定いたします。確定時に、ご入力のメールアドレスへカレンダーの招待をお送りします（オンラインの場合はGoogle Meetのリンク付き）。</li>
       <li data-en="For in-person meetings, the location will be confirmed with you by email.">対面の場合、場所は確認のうえ改めてメールでご連絡します。</li>
       <li data-en="Reservations must be made within the current month.">予約は当月内のみとしてください。</li>
+      <li data-en="Your name, email address and message are used only to arrange this meeting.">ご入力のお名前・メールアドレス・ご用件は、面談の調整のためにのみ使用します。</li>
       <li data-en="Reservations may be cancelled for various reasons. Please be aware that we are not responsible for any damages resulting from the use of this page.">諸事情により予約をキャンセルさせていただくことがあります。本予約ページの利用による一切の損害について責任を負いかねます。</li>
     </ul>
     <p class="err" id="formErr" hidden></p>
-    <button class="submit" id="submit" type="submit"><span data-en="Confirm booking">この内容で予約する</span> →</button>
+    <button class="submit" id="submit" type="submit"><span data-en="Send booking request">この内容で仮予約する</span> →</button>
   </form>
 
   <!-- done -->
   <div class="bk done" id="done" hidden>
     <div class="check">✓</div>
-    <h3 data-en="Your booking is confirmed.">ご予約を承りました。</h3>
+    <h3 data-en="Your request has been received.">仮予約を受け付けました。</h3>
     <p id="doneLabel"></p>
     <p class="mut" id="doneNote"></p>
     <button class="link" id="again" data-en="Make another booking">別の予約をする</button>
@@ -221,7 +222,7 @@ $('form').addEventListener('submit',async e=>{
     const j=await r.json();
     if(!j.ok){
       const m={taken:T('申し訳ありません。この時間はたった今埋まりました。別の時間をお選びください。','Sorry, this time was just taken. Please choose another.'),
-        rate:T('短時間に多くの予約があったため、受付を一時停止しています。時間をおいてお試しください。','Too many requests. Please try again later.'),
+        rate:T('ただいま予約の受付を一時的に制限しています。時間をおいてお試しいただくか、別の方法でご連絡ください。','Bookings are temporarily limited. Please try again later.'),
         email:T('メールアドレスを正しく入力してください。','Please enter a valid email.')}[j.error]||T('予約できませんでした。時間をおいて再度お試しください。','Booking failed. Please try again later.');
       err.textContent=m;err.hidden=false;
       if(j.error==='taken'){delete data[type];slot=null;setTimeout(()=>{showPick();load()},1800)}
@@ -229,7 +230,7 @@ $('form').addEventListener('submit',async e=>{
     }
     const ip=f.mode.value==='inperson';
     $('doneLabel').textContent=label()+'　/　'+(ip?T('対面','In person'):T('オンライン（Google Meet）','Online (Google Meet)'));
-    $('doneNote').textContent=ip?T('招待メールをお送りしました。場所は確認のうえ、改めてご連絡します。','An invitation has been sent. We will contact you to confirm the location.'):T('招待メールをお送りしました。当日はメール内の Google Meet リンクからご参加ください。','An invitation has been sent. Please join from the Google Meet link in the invitation.');
+    $('doneNote').textContent=ip?T('内容を確認のうえ、カレンダーの招待で確定のご連絡をお送りします。場所もあわせてご連絡します。','We will review your request and send a calendar invitation to confirm, along with the location.'):T('内容を確認のうえ、Google Meet のリンク付きのカレンダー招待で確定のご連絡をお送りします。','We will review your request and send a calendar invitation with a Google Meet link to confirm.');
     $('form').hidden=true;$('done').hidden=false;step(3);f.reset();
     delete data[type];
   }catch(x){err.textContent=T('通信に失敗しました。時間をおいて再度お試しください。','Network error. Please try again.');err.hidden=false}
