@@ -361,3 +361,8 @@ html[data-theme="light"] .err{color:#a8402f}
 body.page-reserve .ctrl .book{display:none}
 .ctrl .book{white-space:nowrap}
 @media(max-width:640px){.ctrl .book{display:none}}
+
+/* hero name in script */
+.hero h1 .script{display:block;font-family:"Pinyon Script",cursive;font-weight:400;font-size:clamp(64px,11vw,150px);letter-spacing:0;line-height:1.05;color:var(--tx);padding-right:.15em}
+.hero h1 .en{font-family:var(--serif);letter-spacing:.6em;margin-top:18px}
+@media (max-width:520px){.hero h1 .script{font-size:clamp(58px,17vw,78px)}}
