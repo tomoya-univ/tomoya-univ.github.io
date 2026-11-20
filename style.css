@@ -366,3 +366,9 @@ body.page-reserve .ctrl .book{display:none}
 .hero h1 .script{display:block;font-family:"Pinyon Script",cursive;font-weight:400;font-size:clamp(64px,11vw,150px);letter-spacing:0;line-height:1.05;color:var(--tx);padding-right:.15em}
 .hero h1 .en{font-family:var(--serif);letter-spacing:.6em;margin-top:18px}
 @media (max-width:520px){.hero h1 .script{font-size:clamp(58px,17vw,78px)}}
+
+/* booking-only page (/book/) */
+.solo-bar{max-width:1280px;margin:0 auto;padding:22px clamp(20px,5vw,64px);display:flex;align-items:center;justify-content:space-between}
+.solo-k{font-family:var(--mono);font-size:12px;letter-spacing:.3em;color:var(--acc)}
+.solo-head{max-width:1280px;margin:0 auto;padding:clamp(24px,5vw,56px) clamp(20px,5vw,64px) 0}
+.page-book #booking{padding-bottom:clamp(60px,8vw,100px)}

@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Booking</title>
+<meta name="description" content="面談・打合せの予約ページ。オンライン（Google Meet）または対面を選んでお申し込みいただけます。">
+<meta property="og:title" content="Booking">
+<meta property="og:description" content="面談・打合せの予約ページ。オンライン（Google Meet）または対面を選んでお申し込みいただけます。">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://tomoya-univ.github.io/book/">
+<meta property="og:site_name" content="Tomoya Ogikubo">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:image" content="https://tomoya-univ.github.io/og.png?v=3">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="考えたことを、使えるかたちにする。— 法 × 都市 × 情報">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#0b0c0e">
+<link rel="canonical" href="https://tomoya-univ.github.io/book/">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b0c0e'/%3E%3Crect x='3' y='3' width='58' height='58' rx='11' fill='none' stroke='%23c9a96a' stroke-opacity='.35' stroke-width='1.5'/%3E%3Ctext x='32' y='43' text-anchor='middle' font-family='Georgia,serif' font-size='28' fill='%23e9e7e2' letter-spacing='1'%3ET%3Ctspan fill='%23c9a96a'%3E.%3C/tspan%3EO%3C/text%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700&family=Noto+Sans+JP:wght@300;400;500&family=JetBrains+Mono:wght@400;500&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css?v=14">
+<script>try{document.documentElement.dataset.theme=localStorage.getItem("theme")||"dark"}catch(e){}</script>
+</head>
+<body class="page-book">
+<div class="bg"></div>
+
+<div class="solo-bar">
+  <span class="solo-k">BOOKING</span>
+  <div class="ctrl">
+  <button class="theme" id="theme" aria-label="Toggle theme"><svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg><svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></button>
+  <button class="lang" id="lang" aria-label="Switch language"><b data-l="ja">JA</b> / <b data-l="en">EN</b></button>
+  </div>
+</div>
+
+<header class="phead solo-head">
+  <h1 class="rv">Booking<small data-en="Book a meeting">面談・打合せの予約</small></h1>
+</header>
+
+<section id="booking">
+  <p class="rv" style="color:var(--tx2);max-width:640px;margin-bottom:36px" data-en="Choose the option that applies to you, pick a date and time, and verify with your Google account. You can choose either an online meeting (Google Meet) or an in-person meeting.">該当する区分を選び、日時を選んで、Googleアカウントで本人確認のうえお申し込みください。オンライン（Google Meet）と対面（実地）のどちらかをお選びいただけます。</p>
+
+  <ol class="steps rv" id="steps">
+    <li class="on"><span>01</span><b data-en="Type">区分</b></li>
+    <li><span>02</span><b data-en="Date &amp; time">日時</b></li>
+    <li><span>03</span><b data-en="Details">入力</b></li>
+    <li><span>04</span><b data-en="Done">完了</b></li>
+  </ol>
+
+  <div class="rtabs rv" role="tablist">
+    <button class="rtab on" data-k="in" role="tab" aria-selected="true"><span class="no">01</span><b data-en="Within Nagoya City">名古屋市内の方</b><small data-en="10–60 MIN · ONLINE / IN PERSON">10〜60分 · オンライン / 対面</small></button>
+    <button class="rtab" data-k="out" role="tab" aria-selected="false"><span class="no">02</span><b data-en="Outside Nagoya City">名古屋市外の方</b><small data-en="10–60 MIN · ONLINE / IN PERSON">10〜60分 · オンライン / 対面</small></button>
+    <button class="rtab" data-k="campus" role="tab" aria-selected="false"><span class="no">03</span><b data-en="On campus (NGU)">学内の方</b><small data-en="10–60 MIN · ONLINE / IN PERSON">10〜60分 · オンライン / 対面</small></button>
+  </div>
+
+  <!-- date & time -->
+  <div class="bk rv" id="pick">
+    <div class="bk-head dur-head"><div><span class="k" data-en="DURATION">DURATION</span><b data-en="Meeting length">面談の長さ</b></div></div>
+    <div class="durs" id="durs" role="radiogroup">
+      <button type="button" class="dur" data-m="10">10<small data-en="min">分</small></button><button type="button" class="dur" data-m="20">20<small data-en="min">分</small></button><button type="button" class="dur" data-m="30">30<small data-en="min">分</small></button><button type="button" class="dur" data-m="40">40<small data-en="min">分</small></button><button type="button" class="dur" data-m="50">50<small data-en="min">分</small></button><button type="button" class="dur on" data-m="60">60<small data-en="min">分</small></button>
+    </div>
+    <div class="bk-head sub">
+      <div><span class="k" data-en="SELECT A DATE">SELECT A DATE</span><b id="monthLabel">—</b></div>
+      <div class="nav2"><button class="arrow" id="prev" aria-label="Previous">←</button><button class="arrow" id="next" aria-label="Next">→</button></div>
+    </div>
+    <div class="days" id="days"></div>
+    <div class="bk-head sub"><div><span class="k">SELECT A TIME</span><b id="dayLabel">—</b></div><span class="tz">GMT+09:00 JST</span></div>
+    <div class="slots" id="slots"></div>
+  </div>
+
+  <!-- form -->
+  <form class="bk form" id="form" hidden novalidate>
+    <div class="sel">
+      <span class="k" data-en="YOUR BOOKING">YOUR BOOKING</span>
+      <b id="selLabel">—</b>
+      <button type="button" class="link" id="change" data-en="Change">変更する</button>
+    </div>
+    <fieldset class="mode">
+      <legend data-en="Format">面談の形式</legend><em>*</em>
+      <label class="opt"><input type="radio" name="mode" value="meet" checked><span class="box"><b data-en="Online">オンライン</b><small>GOOGLE MEET</small></span></label>
+      <label class="opt"><input type="radio" name="mode" value="inperson"><span class="box"><b data-en="In person">対面（実地）</b><small>IN PERSON</small></span></label>
+    </fieldset>
+    <label id="placeRow" hidden><span data-en="Preferred location (optional)">ご希望の場所（任意）</span><input name="place" maxlength="200" data-en-ph="e.g. near Nagoya Station, on campus" placeholder="例：名古屋駅周辺、学内 など"></label>
+    <label><span data-en="Name">お名前</span><em>*</em><input name="name" required maxlength="60" autocomplete="name"></label>
+    <div class="gid" id="gid">
+      <span class="gl"><span data-en="Verify with Google">Googleアカウントで本人確認</span><em>*</em></span>
+      <div id="gsiBtn" class="gbtn"></div>
+      <div class="gwho" id="gwho" hidden><span class="gok">✓</span><b id="gEmail"></b><button type="button" id="gOut" data-en="Change">切り替え</button></div>
+      <small data-en="Your booking uses this verified Google address. Only your name and email are shared.">このメールアドレスで予約します。受け取るのはお名前とメールアドレスのみです。</small>
+      <input type="hidden" name="email">
+    </div>
+    <label><span data-en="Purpose (optional)">ご用件（任意）</span><textarea name="note" rows="4" maxlength="1000"></textarea></label>
+    <label class="hp" aria-hidden="true">Website<input name="website" tabindex="-1" autocomplete="off"></label>
+    <ul class="terms">
+      <li data-en="Your request is received as a provisional booking. Once confirmed, a Google Calendar invitation will be sent to the email of the Google account you signed in with (with a Meet link for online meetings).">送信後は仮予約となり、確認のうえ確定いたします。確定時に、ログインしたGoogleアカウントのメールアドレスへカレンダーの招待をお送りします（オンラインの場合はGoogle Meetのリンク付き）。</li>
+      <li data-en="For in-person meetings, the location will be confirmed with you by email.">対面の場合、場所は確認のうえ改めてメールでご連絡します。</li>
+      <li data-en="Bookings can be made up to 30 days in advance.">予約は30日先まで受け付けています。</li>
+      <li data-en="Your name, email address and message are used only to arrange this meeting.">ご入力のお名前・メールアドレス・ご用件は、面談の調整のためにのみ使用します。</li>
+      <li data-en="Reservations may be cancelled for various reasons. Please be aware that we are not responsible for any damages resulting from the use of this page.">諸事情により予約をキャンセルさせていただくことがあります。本予約ページの利用による一切の損害について責任を負いかねます。</li>
+    </ul>
+    <div class="cf" id="cf"></div>
+    <p class="bk-privacy"><a href="../privacy.html" data-en="Privacy policy">プライバシーポリシー</a><span data-en=" — how your information is handled"> — いただいた情報の取り扱いについて</span></p>
+    <p class="err" id="formErr" hidden></p>
+    <button class="submit" id="submit" type="submit"><span data-en="Send booking request">この内容で仮予約する</span> →</button>
+  </form>
+
+  <!-- done -->
+  <div class="bk done" id="done" hidden>
+    <div class="check">✓</div>
+    <h3 data-en="Your request has been received.">仮予約を受け付けました。</h3>
+    <p id="doneLabel"></p>
+    <p class="mut" id="doneNote"></p>
+    <button class="link" id="again" data-en="Make another booking">別の予約をする</button>
+  </div>
+
+  <p class="rnote rv" id="fallback" hidden data-en="The booking system is temporarily unavailable. Please try again later.">ただいま予約システムに接続できません。時間をおいて再度お試しください。</p>
+</section>
+
+
+<script>
+// テーマ・言語・表示アニメーション（予約専用ページ用の最小版）
+(()=>{
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.1});
+document.querySelectorAll('.rv').forEach(el=>io.observe(el));
+const tr=[...document.querySelectorAll('[data-en]')];tr.forEach(el=>el.dataset.ja=el.innerHTML);
+function setLang(l){tr.forEach(el=>el.innerHTML=l==='en'?el.dataset.en:el.dataset.ja);document.documentElement.lang=l;
+ document.querySelectorAll('#lang b').forEach(b=>b.classList.toggle('on',b.dataset.l===l));try{localStorage.setItem('lang',l)}catch(e){}}
+let l='ja';try{l=localStorage.getItem('lang')||(navigator.language.startsWith('ja')?'ja':'en')}catch(e){}
+setLang(l);
+document.getElementById('lang').addEventListener('click',()=>{l=l==='ja'?'en':'ja';setLang(l)});
+document.getElementById('theme').addEventListener('click',()=>{const t=document.documentElement.dataset.theme==='light'?'dark':'light';document.documentElement.dataset.theme=t;try{localStorage.setItem('theme',t)}catch(e){}});
+})();
+</script>
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer></script>
+<script src="https://accounts.google.com/gsi/client" async defer onload="window.gsiReady&&gsiReady()"></script>
+<script>
+(()=>{
+// ===== 設定 =====
+const GAS = 'https://script.google.com/macros/s/AKfycbwwHZMbajyQEnh_Q0-qykaZGZKVrILhgStKGElsD0LVBuhTKzPhHKeGp9OxKGPCkfqY/exec';
+const WORKER = 'https://tomoya-booking.tomoya-univ.workers.dev';
+let API = WORKER, trusted = false;
+// 大学の固定IPから来ているかを中継（Cloudflare Worker）に確認。中継が使えないときは Apps Script に直接つなぐ
+const trustReady = fetch(WORKER+'/trust',{cache:'no-store'}).then(r=>r.json()).then(j=>{trusted=!!j.trusted}).catch(()=>{API=GAS});
+const SITEKEY = '0x4AAAAAAGCugDenG0MIqUHV'; // Cloudflare Turnstile（公開用のサイトキー）
+const TZ='Asia/Tokyo';
+const $=id=>document.getElementById(id);
+const en=()=>document.documentElement.lang==='en';
+const T=(ja,e)=>en()?e:ja;
+
+let type='in', dur=60, data={}, day=null, slot=null, page=0, cfId=null;
+const key=()=>type+':'+dur;
+const PER=7;
+
+const ymd=d=>new Intl.DateTimeFormat('en-CA',{timeZone:TZ,year:'numeric',month:'2-digit',day:'2-digit'}).format(d);
+const fmt=(d,o)=>new Intl.DateTimeFormat(en()?'en-US':'ja-JP',{timeZone:TZ,...o}).format(d);
+const hm=d=>new Intl.DateTimeFormat('en-GB',{timeZone:TZ,hour:'2-digit',minute:'2-digit'}).format(d);
+
+function step(n){[...$('steps').children].forEach((li,i)=>{li.classList.toggle('on',i<=n);li.classList.toggle('cur',i===n)})}
+
+function fallback(show){
+  $('fallback').hidden=!show;
+  $('pick').classList.toggle('off',show);
+}
+
+async function load(){
+  slot=null; day=null; page=0;
+  $('days').innerHTML='<div class="skel"></div>'.repeat(PER); $('slots').innerHTML='';
+  $('dayLabel').textContent='—'; $('monthLabel').textContent='—';
+  if(!API){fallback(true);$('days').innerHTML='';return}
+  if(data[key()]){render();return}
+  try{
+    const k0=key();
+    await trustReady;
+    const r=await fetch(API+'?action=slots&type='+type+'&dur='+dur,{cache:'no-store'});
+    const j=await r.json(); if(!j.ok) throw j;
+    if(j.paused){$('pick').classList.add('off');$('days').innerHTML='';$('monthLabel').textContent='—';$('slots').innerHTML='<p class="empty">'+T('現在、予約の受付を一時停止しています。','Bookings are currently paused.')+'</p>';$('pick').classList.remove('off');return}
+    const by={}; j.slots.forEach(s=>{const d=new Date(s),k=ymd(d);(by[k]=by[k]||[]).push(d)});
+    data[k0]={by,dur:j.durationMin||dur};
+    if(k0!==key())return;
+    fallback(false); render();
+  }catch(e){console.warn(e);fallback(true);$('days').innerHTML=''}
+}
+
+function dayList(){
+  const out=[],now=new Date();
+  for(let i=0;i<=30;i++){out.push(new Date(now.getTime()+i*864e5))}
+  return out;
+}
+
+function render(){
+  const D=data[key()]; if(!D) return;
+  const list=dayList(), pages=Math.ceil(list.length/PER);
+  if(day===null){const first=list.find(d=>D.by[ymd(d)]);day=first?ymd(first):ymd(list[0]);page=Math.floor(list.findIndex(d=>ymd(d)===day)/PER)}
+  const view=list.slice(page*PER,page*PER+PER);
+  $('monthLabel').textContent=fmt(view[0],{year:'numeric',month:'long'});
+  $('prev').disabled=page===0; $('next').disabled=page>=pages-1;
+  $('days').innerHTML=view.map(d=>{const k=ymd(d),n=(D.by[k]||[]).length;
+    return `<button class="day${k===day?' on':''}" data-d="${k}" ${n?'':'disabled'}><small>${fmt(d,{weekday:'short'})}</small><b>${fmt(d,{day:'numeric'}).replace('日','')}</b><i>${n?T(n+'枠',n+(n>1?' slots':' slot')):'—'}</i></button>`}).join('');
+  const sl=D.by[day]||[];
+  const dd=new Date(day+'T12:00:00+09:00');
+  $('dayLabel').textContent=fmt(dd,{month:'long',day:'numeric',weekday:'long'});
+  $('slots').innerHTML=sl.length?sl.map(s=>{const e=new Date(s.getTime()+D.dur*6e4);return `<button class="slot${slot&&+slot===+s?' on':''}" data-s="${s.toISOString()}" title="${hm(s)} – ${hm(e)}">${hm(s)}</button>`}).join('')
+    :`<p class="empty">${T('この日は空きがありません。','No times available on this day.')}</p>`;
+}
+
+function label(){
+  const D=data[key()],e=new Date(slot.getTime()+D.dur*6e4);
+  const tl=document.querySelector(`.rtab[data-k="${type}"] b`).textContent;
+  return `${fmt(slot,{month:'long',day:'numeric',weekday:'short'})} ${hm(slot)} – ${hm(e)}（${T(D.dur+'分',D.dur+' min')}）　/　${tl}`;
+}
+
+// events
+document.querySelectorAll('.rtab').forEach(t=>t.addEventListener('click',()=>{
+  document.querySelectorAll('.rtab').forEach(x=>{x.classList.toggle('on',x===t);x.setAttribute('aria-selected',x===t)});
+  type=t.dataset.k; showPick(); load();
+}));
+$('days').addEventListener('click',e=>{const b=e.target.closest('.day');if(!b||b.disabled)return;day=b.dataset.d;slot=null;render();step(1)});
+$('slots').addEventListener('click',e=>{const b=e.target.closest('.slot');if(!b)return;slot=new Date(b.dataset.s);render();
+  $('selLabel').textContent=label();$('pick').hidden=true;$('form').hidden=false;$('formErr').hidden=true;step(2);cfRender();gsiInit();
+  $('form').scrollIntoView({behavior:'smooth',block:'start'});setTimeout(()=>$('form').name.focus(),400)});
+$('prev').addEventListener('click',()=>{page--;render()});
+$('next').addEventListener('click',()=>{page++;render()});
+function showPick(){$('pick').hidden=false;$('form').hidden=true;$('done').hidden=true;step(slot?1:0)}
+$('change').addEventListener('click',showPick);
+$('again').addEventListener('click',()=>{slot=null;data={};showPick();load()});
+$('durs').addEventListener('click',e=>{const b=e.target.closest('.dur');if(!b)return;
+  document.querySelectorAll('.dur').forEach(x=>x.classList.toggle('on',x===b));dur=+b.dataset.m;load()});
+
+// ===== Google ログイン（本人確認） =====
+const GCLIENT = '94434616271-7v6f1gvfu26qrmlodrlistmbo5g80dhe.apps.googleusercontent.com';
+let idToken = '';
+const jwt=t=>{try{return JSON.parse(decodeURIComponent(atob(t.split('.')[1].replace(/-/g,'+').replace(/_/g,'/')).split('').map(c=>'%'+('00'+c.charCodeAt(0).toString(16)).slice(-2)).join('')))}catch(_){return {}}};
+function gsiInit(){
+  if(gsiInit.done||!window.google||!google.accounts||!google.accounts.id)return;
+  gsiInit.done=true;
+  google.accounts.id.initialize({client_id:GCLIENT,ux_mode:'popup',auto_select:false,callback:r=>{
+    const p=jwt(r.credential),f=$('form');
+    if(!p.email){return}
+    idToken=r.credential;f.email.value=p.email;
+    if(!f.name.value.trim()&&p.name)f.name.value=p.name;
+    $('gEmail').textContent=p.email;$('gwho').hidden=false;$('gsiBtn').hidden=true;$('formErr').hidden=true;
+  }});
+  google.accounts.id.renderButton($('gsiBtn'),{theme:document.documentElement.dataset.theme==='light'?'outline':'filled_black',size:'large',text:'signin_with',shape:'rectangular',locale:en()?'en':'ja'});
+}
+window.gsiReady=()=>{if(!$('form').hidden)gsiInit()};
+function gsiReset(){idToken='';$('form').email.value='';$('gwho').hidden=true;$('gsiBtn').hidden=false;try{google.accounts.id.disableAutoSelect()}catch(_){}}
+$('gOut').addEventListener('click',gsiReset);
+
+// ===== Cloudflare Turnstile =====
+function cfRender(){
+  if(trusted){$('cf').hidden=true;return}
+  if(!SITEKEY||!window.turnstile)return;
+  if(cfId!==null){try{turnstile.reset(cfId)}catch(_){}return}
+  cfId=turnstile.render('#cf',{sitekey:SITEKEY,theme:document.documentElement.dataset.theme==='light'?'light':'dark',language:en()?'en':'ja',action:'booking','retry':'auto','error-callback':()=>{const e=$('formErr');e.textContent=T('ロボット確認を完了できませんでした。お手数ですが、別のブラウザ（Chrome・Safariなど）やスマートフォンからお試しください。','Verification could not be completed. Please try another browser or your phone.');e.hidden=false;return true}});
+}
+const cfToken=()=>{try{return cfId!==null?turnstile.getResponse(cfId)||'':''}catch(_){return ''}};
+const cfReset=()=>{try{if(cfId!==null)turnstile.reset(cfId)}catch(_){}};
+const isEmail=s=>s.length<=254&&/^[A-Za-z0-9!#$%&'*+\/=?^_`{|}~-]+(\.[A-Za-z0-9!#$%&'*+\/=?^_`{|}~-]+)*@([A-Za-z0-9]([A-Za-z0-9-]{0,61}[A-Za-z0-9])?\.)+[A-Za-z]{2,63}$/.test(s)&&s.split('@')[0].length<=64;
+
+$('form').addEventListener('submit',async e=>{
+  e.preventDefault();
+  const f=e.target, err=$('formErr');
+  const name=f.name.value.trim(), email=f.email.value.trim();
+  if(!name){err.textContent=T('お名前を入力してください。','Please enter your name.');err.hidden=false;return}
+  if(!idToken||!isEmail(email)){err.textContent=T('「Googleでログイン」から本人確認をしてください。','Please verify with Google first.');err.hidden=false;return}
+  const cf=cfToken();
+  if(!trusted&&SITEKEY&&window.turnstile&&!cf){err.textContent=T('ロボットでないことの確認が終わるまでお待ちください。','Please complete the verification.');err.hidden=false;return}
+  const btn=$('submit');btn.disabled=true;btn.classList.add('busy');err.hidden=true;
+  try{
+    const r=await fetch(API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},
+      body:JSON.stringify({action:'book',type,dur,cf,idt:idToken,start:slot.toISOString(),mode:f.mode.value,place:f.place.value,name,email,note:f.note.value,website:f.website.value})});
+    const j=await r.json();
+    if(!j.ok){
+      const m={taken:T('申し訳ありません。この時間はたった今埋まりました。別の時間をお選びください。','Sorry, this time was just taken. Please choose another.'),
+        rate:T('ただいま予約の受付を一時的に制限しています。時間をおいてお試しいただくか、別の方法でご連絡ください。','Bookings are temporarily limited. Please try again later.'),
+        email:T('メールアドレスを正しく入力してください。','Please enter a valid email.'),
+        auth:T('本人確認の有効期限が切れました。お手数ですが、もう一度ログインしてください。','Your sign-in expired. Please verify with Google again.'),
+        paused:T('現在、予約の受付を一時停止しています。','Bookings are currently paused.'),
+        captcha:T('ロボットでないことの確認に失敗しました。もう一度お試しください。','Verification failed. Please try again.')}[j.error]||T('予約できませんでした。時間をおいて再度お試しください。','Booking failed. Please try again later.');
+      err.textContent=m;err.hidden=false;cfReset();if(j.error==='auth')gsiReset();
+      if(j.error==='taken'){data={};slot=null;setTimeout(()=>{showPick();load()},1800)}
+      return;
+    }
+    const ip=f.mode.value==='inperson';
+    $('doneLabel').textContent=label()+'　/　'+(ip?T('対面','In person'):T('オンライン（Google Meet）','Online (Google Meet)'));
+    $('doneNote').textContent=ip?T('内容を確認のうえ、カレンダーの招待で確定のご連絡をお送りします。場所もあわせてご連絡します。','We will review your request and send a calendar invitation to confirm, along with the location.'):T('内容を確認のうえ、Google Meet のリンク付きのカレンダー招待で確定のご連絡をお送りします。','We will review your request and send a calendar invitation with a Google Meet link to confirm.');
+    $('form').hidden=true;$('done').hidden=false;step(3);f.reset();
+    data={};cfReset();
+  }catch(x){cfReset();err.textContent=T('通信に失敗しました。時間をおいて再度お試しください。','Network error. Please try again.');err.hidden=false}
+  finally{btn.disabled=false;btn.classList.remove('busy')}
+});
+
+document.querySelectorAll('input[name=mode]').forEach(r=>r.addEventListener('change',()=>{$('placeRow').hidden=$('form').mode.value!=='inperson'}));
+$('form').addEventListener('reset',()=>setTimeout(()=>{$('placeRow').hidden=true},0));
+const ph=$('form').place;$('lang').addEventListener('click',()=>setTimeout(()=>{ph.dataset.ja=ph.dataset.ja||'例：名古屋駅周辺、学内 など';ph.placeholder=en()?ph.dataset.enPh:ph.dataset.ja},0));
+$('lang').addEventListener('click',()=>setTimeout(()=>{render();if(slot)$('selLabel').textContent=label()},0));
+load();
+})();
+</script>
+<!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "f81fd8d30ae948d6ae78dea09ddb84f5"}'></script><!-- End Cloudflare Web Analytics -->
+<!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "f81fd8d30ae948d6ae78dea09ddb84f5"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>
