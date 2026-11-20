@@ -359,4 +359,5 @@ html[data-theme="light"] .err{color:#a8402f}
 .ctrl .book{display:inline-flex;align-items:center;height:36px;padding:0 16px;background:var(--acc);color:var(--bg);font-size:13px;letter-spacing:.14em;text-decoration:none;border:1px solid var(--acc);transition:transform .25s}
 .ctrl .book:hover{transform:translateY(-1px)}
 body.page-reserve .ctrl .book{display:none}
-@media(max-width:520px){.ctrl .book{height:34px;padding:0 12px;font-size:12px}}
+.ctrl .book{white-space:nowrap}
+@media(max-width:640px){.ctrl .book{display:none}}
